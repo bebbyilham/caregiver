@@ -30,20 +30,20 @@
           <div class="col">
               <div class="card shadow-sm">
                   <div class="card-header">
-                      <h3 class="card-title">Daftar Pasien</h3>
+                      <h3 class="card-title">Daftar Pasien Rawatan</h3>
                   </div>
                   <div class="card-body">
                       <div class="table-responsive">
-                          <table id="tabel_pasien" class="table table-hover table-sm display">
+                          <table id="tabel_rawatan" class="table table-hover table-sm display">
                               <thead>
                                   <tr>
                                       <th class="text-center" style="width: 10%;">#</th>
                                       <!-- <th style="width: 5%;">No.</th> -->
-                                      <th style="width: 25%;">Nama</th>
-                                      <th style="width: 20%;">Alamat</th>
+                                      <th style="width: 25%;">Data Pasien</th>
+                                      <th style="width: 20%;">Diagnosa</th>
                                       <!-- <th style="width: 40%;">Jenis Kelamin</th> -->
-                                      <th style="width: 10%;">No. Telp</th>
-                                      <th style="width: 10%;">Penanggung Jawab</th>
+                                      <th style="width: 10%;">BI Score</th>
+                                      <th style="width: 10%;">Alergi</th>
                                   </tr>
                               </thead>
                           </table>
@@ -101,13 +101,13 @@
           $(document).ready(function() {
               $('#loading').hide();
               // DataTable
-              var dataTable = $('#tabel_pasien').DataTable({
+              var dataTable = $('#tabel_rawatan').DataTable({
                   "serverSide": true,
                   "responsive": true,
                   "pageLength": 25,
                   "order": [],
                   "ajax": {
-                      "url": "<?php echo base_url(); ?>pasien/tabelpasien",
+                      "url": "<?php echo base_url(); ?>pasien/tabelrawatan",
                       "type": "POST",
                   },
                   columnDefs: [{

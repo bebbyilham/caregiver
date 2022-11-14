@@ -75,29 +75,6 @@ class Pasien extends MX_Controller
             $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari";
             $sub_array[] = substr($row->alamat, 0, 25);
 
-            // if ($row->jenis_kelamin == '1') {
-            //     $sub_array[] = '
-            //     <div class="dropdown">
-            //             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            //               <span class="badge badge-success">Laki-laki</span>
-            //             </a>
-            //             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-            //                 <a id="' . $row->id . '" status="1" class="dropdown-item ubahstatus">Draft</a>
-            //                 <a id="' . $row->id . '" status="2" class="dropdown-item ubahstatus">Published</a>
-            //             </div>
-            //     </div>';
-            // } else {
-            //     $sub_array[] = '
-            //     <div class="dropdown">
-            //             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            //               <span class="badge badge-secondary">Perempuan</span>
-            //             </a>
-            //             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-            //                 <a id="' . $row->id . '" status="1" class="dropdown-item ubahstatus">Draft</a>
-            //                 <a id="' . $row->id . '" status="2" class="dropdown-item ubahstatus">Published</a>
-            //             </div>
-            //     </div>';
-            // }
             $sub_array[] = $row->notelp1 . "<br>" . $row->notelp2;
             $sub_array[] = "<b>" . $row->nama_pj . "</b><br>" . strtoupper("$row->notelp3");
 
@@ -149,6 +126,120 @@ class Pasien extends MX_Controller
 
         $this->Pasien_model->simpan_pasien($data);
         echo json_encode($data);
+    }
+
+    public function rawatanbaru($id)
+    {
+        $data['title'] = 'Rawatan Baru';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $id])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/rawatan_baru';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+
+    public function simpanrawatan()
+    {
+        $notransaksi = 'CG' . date("ymdhis");
+        $data_rawatan = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'tgl_awal_rawatan'      => $_POST['tgl_awal_rawatan'],
+            'diagnosa_sakit'        => $_POST['diagnosa_sakit'],
+            'alergi'                => $_POST['alergi'],
+            'barthel_index_score'   => $_POST['barthel_index_score'],
+            'barthel_index_score_date' => $_POST['barthel_index_score_date'],
+            'status'                => $_POST['status'],
+        );
+        $data_transaksi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'status'                => 1,
+        );
+
+        $this->Pasien_model->simpan_rawatan($data_rawatan);
+        $this->Pasien_model->simpan_transaksi($data_transaksi);
+        echo json_encode([
+            'rawatan' => $data_rawatan,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function rawatan()
+    {
+        $data['title'] = 'Pasien Rawatan';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/rawatan';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+    public function tabelrawatan()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_rawatan();
+
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $birthDate = new DateTime($row->tanggal_lahir);
+            $today = new DateTime("today");
+            if ($birthDate > $today) {
+                exit("0 tahun 0 bulan 0 hari");
+            }
+            $y = $today->diff($birthDate)->y;
+            $m = $today->diff($birthDate)->m;
+            $d = $today->diff($birthDate)->d;
+            $sub_array[] = '<div class="text-center">
+            <div class="dropdown">
+                            <a class="text-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v mr-2"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <span class="small p-3 font-weight-bold text-dark">Pilih Status</span>
+                                <a class="dropdown-item aktivitas" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '" >Aktivitas</a>
+                                <a class="dropdown-item keadaan_pasien" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '" >Keadaan Pasien</a>
+                                <a class="dropdown-item tanda_vital" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Tanda Vital</a>
+                                <a class="dropdown-item catatan_perkembangan" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Catatan Perkembangan</a>
+                                <a class="dropdown-item medikasi" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Medikasi</a>
+                                <a class="dropdown-item pemantauan_alat_medik" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Pemantauan Alat Medik</a>
+                                <a class="dropdown-item integritas_kulit" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Integritas Kulit</a>
+                                <a class="dropdown-item hasil_lab_penunjang" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
+                            </div>
+            </div>
+            </div>
+            ';
+            // $sub_array[] = $no;
+            if ($row->jenis_kelamin == '1') {
+                $jk = 'Laki-laki';
+            } else {
+                $jk = 'Perempuan';
+            }
+            $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari";
+            $sub_array[] = $row->diagnosa_sakit;
+
+            $sub_array[] = "<b>" . $row->barthel_index_score . "</b><br>" . $row->barthel_index_score_date;
+            $sub_array[] = "<span>" . $row->alergi . "</span>";
+
+
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_rawatan(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_rawatan(),
+            "data"                => $data
+        );
+        echo json_encode($output);
     }
 
     public function ubahstatusblog()

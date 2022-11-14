@@ -46,7 +46,57 @@
             $this->db->from('pasien');
             return $this->db->count_all_results();
         }
-        //end blog
+        //end pasien
+
+        //tabel rawatan
+        var $order_column_rawatan = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_rawatan()
+        {
+            // $id_rawatan = $_POST['idpasien'];
+            $this->db->select('*');
+            // $this->db->where('jenis_layanan', 2);
+            $this->db->from('rawatan');
+            $this->db->join('pasien', 'pasien.id = rawatan.id_pasien', 'LEFT');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('nama', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('rawatan.created_at', 'ASC');
+            }
+        }
+
+
+        public function make_datatables_rawatan()
+        {
+            $this->make_query_rawatan();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_rawatan()
+        {
+            $this->make_query_rawatan();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_rawatan()
+        {
+            $this->db->select("*");
+            $this->db->from('rawatan');
+            return $this->db->count_all_results();
+        }
+        //end rawatan
 
         //image blog
         var $order_column_image_pasien = array(null, 'name', null, 'status', 'created_at', null);
@@ -99,6 +149,16 @@
         {
             $this->db->insert('pasien', $data);
         }
+        public function simpan_rawatan($data)
+        {
+            $this->db->insert('rawatan', $data);
+        }
+        public function simpan_transaksi($data)
+        {
+            $this->db->insert('transaksi', $data);
+        }
+
+
         public function simpan_image_pasien($data)
         {
             $this->db->insert('image_pasiens', $data);
