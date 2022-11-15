@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SiDepresi | Selamat Datang</title>
+    <title>Caregiver | Selamat Datang</title>
     <link rel="shortcut icon" href="<?= base_url(); ?>assets/logo/favicon.ico">
 
     <!-- Fonts -->

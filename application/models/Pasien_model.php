@@ -53,7 +53,18 @@
         public function make_query_rawatan()
         {
             // $id_rawatan = $_POST['idpasien'];
-            $this->db->select('*');
+            $this->db->select('
+            rawatan.id AS id,
+            rawatan.id_pasien AS id_pasien,
+            rawatan.diagnosa_sakit AS diagnosa_sakit,
+            rawatan.barthel_index_score AS barthel_index_score,
+            rawatan.barthel_index_score_date AS barthel_index_score_date,
+            rawatan.alergi AS alergi,
+            pasien.nama AS nama,
+            pasien.nik AS nik,
+            pasien.tanggal_lahir AS tanggal_lahir,
+            pasien.jenis_kelamin AS jenis_kelamin
+            ');
             // $this->db->where('jenis_layanan', 2);
             $this->db->from('rawatan');
             $this->db->join('pasien', 'pasien.id = rawatan.id_pasien', 'LEFT');
@@ -97,6 +108,97 @@
             return $this->db->count_all_results();
         }
         //end rawatan
+        //tabel aktivitas
+        var $order_column_aktivitas = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_aktivitas()
+        {
+            // $id_aktivitas = $_POST['idpasien'];
+            $this->db->select('
+            aktivitas.id AS id,
+            aktivitas.id_pasien AS id_pasien,
+            aktivitas.id_rawatan AS id_rawatan,
+            aktivitas.no_transaksi AS no_transaksi,
+            aktivitas.makan AS makan,
+            aktivitas.mandi AS mandi,
+            aktivitas.kebersihan_diri AS kebersihan_diri,
+            aktivitas.berpakaian AS berpakaian,
+            aktivitas.defekasi AS defekasi,
+            aktivitas.miksi AS miksi,
+            aktivitas.penggunaan_toilet AS penggunaan_toilet,
+            aktivitas.transfer AS transfer,
+            aktivitas.mobilitas AS mobilitas,
+            aktivitas.naik_tangga AS naik_tangga,
+            aktivitas.status AS status,
+            aktivitas.created_at AS created_at,
+            aktivitas.updated_at AS updated_at,
+            (
+            makan + 
+            mandi+
+            kebersihan_diri+
+            berpakaian +
+            defekasi +
+            miksi +
+            penggunaan_toilet +
+            transfer +
+            mobilitas +
+            naik_tangga
+            ) AS total_skor
+            ');
+            $this->db->where('id_rawatan', $_POST['id_rawatan']);
+            $this->db->where('status !=', 99);
+            $this->db->from('aktivitas');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('nama', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('aktivitas.created_at', 'DESC');
+            }
+        }
+
+
+        public function make_datatables_aktivitas()
+        {
+            $this->make_query_aktivitas();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_aktivitas()
+        {
+            $this->make_query_aktivitas();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_aktivitas()
+        {
+            $this->db->select("*");
+            $this->db->from('aktivitas');
+            return $this->db->count_all_results();
+        }
+        //end aktivitas
+
+        public function update_aktivitas($data, $id)
+        {
+            $this->db->where('id', $id);
+            $this->db->update('aktivitas', $data);
+        }
+
+        public function update_transaksi($data, $id)
+        {
+            $this->db->where('no_transaksi', $id);
+            $this->db->update('transaksi', $data);
+        }
 
         //image blog
         var $order_column_image_pasien = array(null, 'name', null, 'status', 'created_at', null);
@@ -156,6 +258,10 @@
         public function simpan_transaksi($data)
         {
             $this->db->insert('transaksi', $data);
+        }
+        public function simpan_aktivitas($data)
+        {
+            $this->db->insert('aktivitas', $data);
         }
 
 
