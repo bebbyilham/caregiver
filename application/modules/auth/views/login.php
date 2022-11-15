@@ -78,7 +78,7 @@
     <!-- Main content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header bg-gradient-warning py-5 py-lg-8 pt-lg-9">
+        <div class="header bg-gradient-primary py-5 py-lg-8 pt-lg-9">
             <div class="container">
                 <div class="header-body text-center mb-5">
                     <div class="row justify-content-center">
@@ -102,7 +102,7 @@
                     <div class="card bg-secondary border-0 mb-0">
                         <div class="card-body px-lg-5 py-lg-5">
                             <div class="text-center text-muted mb-4">
-                                <h3>Login SiDepresi</h3>
+                                <h3>Login Caregiver</h3>
                             </div>
                             <form role="form" action="<?= base_url('auth'); ?>" method="post">
                                 <div class="form-group mb-3">
@@ -128,7 +128,7 @@
                                     </label>
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-warning my-4">Sign in</button>
+                                    <button type="submit" class="btn btn-primary my-4">Sign in</button>
                                 </div>
                             </form>
                         </div>
