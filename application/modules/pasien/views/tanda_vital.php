@@ -44,52 +44,114 @@
                 <h3 class="mb-0"><?= $pasien['nama'] ?></h3><span><?= '(' . $jk . ' - ' . $y . ' Tahun ' . $m . ' Bulan ' . $d . ' Hari)' ?></span>
               </div>
               <div class="col-4 text-right">
-                <button type="button" id="simpan_rawatan" class="btn btn-sm btn-primary">Simpan</button>
+                <button type="button" id="simpan_tandavital" class="btn btn-sm btn-primary">Simpan</button>
               </div>
             </div>
           </div>
           <div class="card-body">
             <form>
-              <h6 class="heading-small text-muted mb-4">Data Pasien</h6>
-              <div class="pl-lg-4">
+              <h6 class="heading-small text-muted mb-4">Data Tanda Vital Pasien</h6>
+              <div class="pl-4">
                 <div class="row">
-                  <div class="col-lg-6">
+                  <div class="col-6">
                     <div class="form-group">
-                      <label class="form-control-label" for="nama">Diagnosa</label>
-                      <input type="text" id="diagnosa_sakit" name="diagnosa_sakit" class="form-control" placeholder="Diagnosa Sakit">
+                      <label class="form-control-label" for="sistolik">Sistolik</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="sistolik" name="sistolik" autocomplete="off">
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <span>mmHg</span>
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-lg-6">
-                    <label class="form-control-label" for="nama">Tanggal Rawatan</label>
-                    <input type="text" class="form-control" id="tgl_awal_rawatan" name="tgl_awal_rawatan" placeholder="Pilih Tanggal..." value="<?= date('Y-m-d') ?>" autocomplete="off">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="diastolik">Diastolik</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="diastolik" name="diastolik" autocomplete="off">
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <span>mmHg</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-12">
+                  <div class="col-6">
                     <div class="form-group">
-                      <label class="form-control-label" for="nama">Alergi</label>
-                      <textarea class="form-control" id="alergi" rows="3"></textarea>
+                      <label class="form-control-label" for="suhu">Suhu</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="suhu" name="suhu" autocomplete="off">
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <span>°C</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="nadi">Nadi</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="nadi" name="nadi" autocomplete="off">
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <span>x/menit</span>
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6">
+                  <div class="col-6">
                     <div class="form-group">
-                      <label class="form-control-label" for="barthel_index_score">Barthel Index Score</label>
-                      <input type="text" class="form-control" id="barthel_index_score" name="barthel_index_score" placeholder="Total Skor" autocomplete="off">
+                      <label class="form-control-label" for="pernapasan">Pernapasan</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="pernapasan" name="pernapasan" autocomplete="off">
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <span>x/menit</span>
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <label class="form-control-label" for="input-last-name">Waktu</label>
-                      <input type="text" class="form-control" id="barthel_index_score_date" name="barthel_index_score_date" placeholder="Pilih Tanggal..." value="<?= date('Y-m-d') ?>" autocomplete="off">
-                    </div>
-                  </div>
+
                 </div>
+
 
               </div>
               <!-- <hr class="my-4" /> -->
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h3 class="card-title">Data Tanda Vital Pasien</h3>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="tabel_aktivitas" class="table table-hover table-sm display">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>No.</th>
+                    <th>Waktu</th>
+                    <th>Total Skor</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -137,15 +199,7 @@
     </div>
     <script>
       $(document).ready(function() {
-        $('#tgl_awal_rawatan').datetimepicker({
-          timepicker: false,
-          datepicker: true,
-          scrollInput: false,
-          theme: 'success',
-          format: 'Y-m-d',
-          maxDate: '+2y',
-        });
-        $('#barthel_index_score_date').datetimepicker({
+        $('#tanggal_lahir').datetimepicker({
           timepicker: false,
           datepicker: true,
           scrollInput: false,
@@ -164,53 +218,46 @@
           ],
         });
 
-        $.ajax({
-          url: "<?php echo base_url(); ?>blog/getAllCreators",
-          method: "POST",
-          dataType: 'JSON',
-          success: function(data) {
-            console.log(data);
-            var html = '';
-            var i;
-            html += '<option selected value="0">Pilih Kreator</option>';
-            for (i = 0; i < data.length; i++) {
-              html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-            }
-            $('#creator').html(html);
-            $('#creator').selectpicker('refresh');
-          }
-        });
+
         // DataTable
-        var dataTable = $('#tabel_blog').DataTable({
+        var dataTable = $('#tabel_aktivitas').DataTable({
           "serverSide": true,
           "responsive": true,
           "pageLength": 25,
           "order": [],
           "ajax": {
-            "url": "<?php echo base_url(); ?>blog/tabelblog",
+            "url": "<?php echo base_url(); ?>pasien/tabeltanda_vital",
             "type": "POST",
+            "data": function(data) {
+              data.id_rawatan = '<?= $rawatan['id'] ?>'
+            },
           },
           columnDefs: [{
             orderable: false,
-            targets: [0, 2, 5]
+            targets: [0, 1, 2, 3]
           }],
           autoWidth: !1,
           language: {
-            search: "Cari"
+            search: "Cari",
+            paginate: {
+              "next": "<i class='ni ni-bold-right text-primary'></i>",
+              "previous": "<i class='ni ni-bold-left text-primary'></i>"
+            }
           },
         });
 
         // Edit Pegawai
-        $('#simpan_rawatan').on('click', function() {
+        $('#simpan_tandavital').on('click', function() {
           var id_pasien = '<?= $pasien['id'] ?>'
-          var tgl_awal_rawatan = $('#tgl_awal_rawatan').val()
-          var diagnosa_sakit = $('#diagnosa_sakit').val()
-          var alergi = $('#alergi').val()
-          var barthel_index_score = $('#barthel_index_score').val()
-          var barthel_index_score_date = $('#barthel_index_score_date').val()
+          var id_rawatan = '<?= $rawatan['id'] ?>'
+          var sistolik = $('#sistolik').val()
+          var diastolik = $('#diastolik').val()
+          var suhu = $('#suhu').val()
+          var nadi = $('#nadi').val()
+          var pernapasan = $('#pernapasan').val()
           var status = '1';
 
-          if (id_pasien == '' || tgl_awal_rawatan == '' || diagnosa_sakit == '' || alergi == '') {
+          if (id_pasien == '' || id_rawatan == '' || sistolik == '' || diastolik == '' || suhu == '' || nadi == '' || pernapasan == '') {
             console.log('data belum lengkap');
             Swal.fire({
               icon: 'error',
@@ -219,17 +266,17 @@
             });
           } else {
             $.ajax({
-              url: '<?php echo base_url(); ?>pasien/simpanrawatan',
+              url: '<?php echo base_url(); ?>pasien/simpantandavital',
               method: 'POST',
               dataType: 'JSON',
               data: {
                 id_pasien: id_pasien,
-                tgl_awal_rawatan: tgl_awal_rawatan,
-                diagnosa_sakit: diagnosa_sakit,
-                alergi: alergi,
-                barthel_index_score: barthel_index_score,
-                barthel_index_score_date: barthel_index_score_date,
-                status: status,
+                id_rawatan: id_rawatan,
+                sistolik: sistolik,
+                diastolik: diastolik,
+                suhu: suhu,
+                nadi: nadi,
+                pernapasan: pernapasan
               },
               success: function(data) {
                 console.log(data);
@@ -239,11 +286,48 @@
                   showConfirmButton: false,
                   timer: 1500
                 })
-                // window.location.href = "<?php base_url(); ?>pasien/pasienterdaftar";
+                dataTable.ajax.reload();
               }
             });
           }
 
+        });
+
+        $(document).on('click', '.delete', function() {
+          var id = $(this).attr('id');
+          var notransaksi = $(this).attr('notransaksi');
+          var status = 99;
+          Swal.fire({
+            title: 'Apakah Kamu Yakin?',
+            text: "Hapus data ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Ya, Saya Yakin'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                url: '<?php echo base_url(); ?>pasien/hapustanda_vital',
+                method: 'POST',
+                data: {
+                  id: id,
+                  status: status,
+                  notransaksi: notransaksi
+                },
+                success: function(data) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Data Berhasil Dihapus',
+                    showConfirmButton: false,
+                    timer: 2000
+                  })
+                  dataTable.ajax.reload();
+                }
+              });
+            }
+          })
         });
       });
     </script>

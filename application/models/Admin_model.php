@@ -258,7 +258,7 @@ class Admin_model extends CI_Model
     public function make_query_pengenal()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_pengenal');
+        $this->db->from('referensi_pengenal');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('pengenal', $_POST["search"]["value"]);
@@ -293,31 +293,31 @@ class Admin_model extends CI_Model
     public function get_all_data_pengenal()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_pengenal');
+        $this->db->from('referensi_pengenal');
         return $this->db->count_all_results();
     }
 
     public function tambah_pengenal($data)
     {
-        $this->db->insert('simrsj_master.referensi_pengenal', $data);
+        $this->db->insert('referensi_pengenal', $data);
     }
 
     public function edit_pengenal($id, $data)
     {
         $this->db->where('id_pengenal', $id);
-        $this->db->update('simrsj_master.referensi_pengenal', $data);
+        $this->db->update('referensi_pengenal', $data);
     }
 
     public function delete_pengenal($id)
     {
         $this->db->where('id_pengenal', $id);
-        $this->db->delete('simrsj_master.referensi_pengenal');
+        $this->db->delete('referensi_pengenal');
     }
 
     public function fetch_single_pengenal($id)
     {
         $this->db->where('id_pengenal', $id);
-        $query = $this->db->get('simrsj_master.referensi_pengenal');
+        $query = $this->db->get('referensi_pengenal');
         return $query->result();
     }
 
@@ -331,7 +331,7 @@ class Admin_model extends CI_Model
     public function make_query_agama()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_agama');
+        $this->db->from('referensi_agama');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('ket_agama', $_POST["search"]["value"]);
@@ -366,31 +366,31 @@ class Admin_model extends CI_Model
     public function get_all_data_agama()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_agama');
+        $this->db->from('referensi_agama');
         return $this->db->count_all_results();
     }
 
     public function tambah_agama($data)
     {
-        $this->db->insert('simrsj_master.referensi_agama', $data);
+        $this->db->insert('referensi_agama', $data);
     }
 
     public function edit_agama($id, $data)
     {
         $this->db->where('id_agama', $id);
-        $this->db->update('simrsj_master.referensi_agama', $data);
+        $this->db->update('referensi_agama', $data);
     }
 
     public function delete_agama($id)
     {
         $this->db->where('id_agama', $id);
-        $this->db->delete('simrsj_master.referensi_agama');
+        $this->db->delete('referensi_agama');
     }
 
     public function fetch_single_agama($id)
     {
         $this->db->where('id_agama', $id);
-        $query = $this->db->get('simrsj_master.referensi_agama');
+        $query = $this->db->get('referensi_agama');
         return $query->result();
     }
 
@@ -404,7 +404,7 @@ class Admin_model extends CI_Model
     public function make_query_warganegara()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_warganegara');
+        $this->db->from('referensi_warganegara');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('ket_warganegara', $_POST["search"]["value"]);
@@ -439,31 +439,31 @@ class Admin_model extends CI_Model
     public function get_all_data_warganegara()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_warganegara');
+        $this->db->from('referensi_warganegara');
         return $this->db->count_all_results();
     }
 
     public function tambah_warganegara($data)
     {
-        $this->db->insert('simrsj_master.referensi_warganegara', $data);
+        $this->db->insert('referensi_warganegara', $data);
     }
 
     public function edit_warganegara($id, $data)
     {
         $this->db->where('id_warganegara', $id);
-        $this->db->update('simrsj_master.referensi_warganegara', $data);
+        $this->db->update('referensi_warganegara', $data);
     }
 
     public function delete_warganegara($id)
     {
         $this->db->where('id_warganegara', $id);
-        $this->db->delete('simrsj_master.referensi_warganegara');
+        $this->db->delete('referensi_warganegara');
     }
 
     public function fetch_single_warganegara($id)
     {
         $this->db->where('id_warganegara', $id);
-        $query = $this->db->get('simrsj_master.referensi_warganegara');
+        $query = $this->db->get('referensi_warganegara');
         return $query->result();
     }
 
@@ -475,7 +475,7 @@ class Admin_model extends CI_Model
     public function make_query_sukubangsa()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_sukubangsa');
+        $this->db->from('referensi_sukubangsa');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('ket_sukubangsa', $_POST["search"]["value"]);
@@ -510,31 +510,31 @@ class Admin_model extends CI_Model
     public function get_all_data_sukubangsa()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_sukubangsa');
+        $this->db->from('referensi_sukubangsa');
         return $this->db->count_all_results();
     }
 
     public function tambah_sukubangsa($data)
     {
-        $this->db->insert('simrsj_master.referensi_sukubangsa', $data);
+        $this->db->insert('referensi_sukubangsa', $data);
     }
 
     public function edit_sukubangsa($id, $data)
     {
         $this->db->where('id_sukubangsa', $id);
-        $this->db->update('simrsj_master.referensi_sukubangsa', $data);
+        $this->db->update('referensi_sukubangsa', $data);
     }
 
     public function delete_sukubangsa($id)
     {
         $this->db->where('id_sukubangsa', $id);
-        $this->db->delete('simrsj_master.referensi_sukubangsa');
+        $this->db->delete('referensi_sukubangsa');
     }
 
     public function fetch_single_sukubangsa($id)
     {
         $this->db->where('id_sukubangsa', $id);
-        $query = $this->db->get('simrsj_master.referensi_sukubangsa');
+        $query = $this->db->get('referensi_sukubangsa');
         return $query->result();
     }
 
@@ -546,7 +546,7 @@ class Admin_model extends CI_Model
     public function make_query_statusnikah()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_statusnikah');
+        $this->db->from('referensi_statusnikah');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('ket_statusnikah', $_POST["search"]["value"]);
@@ -581,31 +581,31 @@ class Admin_model extends CI_Model
     public function get_all_data_statusnikah()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_statusnikah');
+        $this->db->from('referensi_statusnikah');
         return $this->db->count_all_results();
     }
 
     public function tambah_statusnikah($data)
     {
-        $this->db->insert('simrsj_master.referensi_statusnikah', $data);
+        $this->db->insert('referensi_statusnikah', $data);
     }
 
     public function edit_statusnikah($id, $data)
     {
         $this->db->where('id_statusnikah', $id);
-        $this->db->update('simrsj_master.referensi_statusnikah', $data);
+        $this->db->update('referensi_statusnikah', $data);
     }
 
     public function delete_statusnikah($id)
     {
         $this->db->where('id_statusnikah', $id);
-        $this->db->delete('simrsj_master.referensi_statusnikah');
+        $this->db->delete('referensi_statusnikah');
     }
 
     public function fetch_single_statusnikah($id)
     {
         $this->db->where('id_statusnikah', $id);
-        $query = $this->db->get('simrsj_master.referensi_statusnikah');
+        $query = $this->db->get('referensi_statusnikah');
         return $query->result();
     }
 
@@ -617,7 +617,7 @@ class Admin_model extends CI_Model
     public function make_query_pendidikan()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_pendidikan');
+        $this->db->from('referensi_pendidikan');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('ket_pendidikan', $_POST["search"]["value"]);
@@ -652,31 +652,31 @@ class Admin_model extends CI_Model
     public function get_all_data_pendidikan()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_pendidikan');
+        $this->db->from('referensi_pendidikan');
         return $this->db->count_all_results();
     }
 
     public function tambah_pendidikan($data)
     {
-        $this->db->insert('simrsj_master.referensi_pendidikan', $data);
+        $this->db->insert('referensi_pendidikan', $data);
     }
 
     public function edit_pendidikan($id, $data)
     {
         $this->db->where('id_pendidikan', $id);
-        $this->db->update('simrsj_master.referensi_pendidikan', $data);
+        $this->db->update('referensi_pendidikan', $data);
     }
 
     public function delete_pendidikan($id)
     {
         $this->db->where('id_pendidikan', $id);
-        $this->db->delete('simrsj_master.referensi_pendidikan');
+        $this->db->delete('referensi_pendidikan');
     }
 
     public function fetch_single_pendidikan($id)
     {
         $this->db->where('id_pendidikan', $id);
-        $query = $this->db->get('simrsj_master.referensi_pendidikan');
+        $query = $this->db->get('referensi_pendidikan');
         return $query->result();
     }
 
@@ -688,7 +688,7 @@ class Admin_model extends CI_Model
     public function make_query_pekerjaan()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_pekerjaan');
+        $this->db->from('referensi_pekerjaan');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('ket_pekerjaan', $_POST["search"]["value"]);
@@ -723,31 +723,31 @@ class Admin_model extends CI_Model
     public function get_all_data_pekerjaan()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_pekerjaan');
+        $this->db->from('referensi_pekerjaan');
         return $this->db->count_all_results();
     }
 
     public function tambah_pekerjaan($data)
     {
-        $this->db->insert('simrsj_master.referensi_pekerjaan', $data);
+        $this->db->insert('referensi_pekerjaan', $data);
     }
 
     public function edit_pekerjaan($id, $data)
     {
         $this->db->where('id_pekerjaan', $id);
-        $this->db->update('simrsj_master.referensi_pekerjaan', $data);
+        $this->db->update('referensi_pekerjaan', $data);
     }
 
     public function delete_pekerjaan($id)
     {
         $this->db->where('id_pekerjaan', $id);
-        $this->db->delete('simrsj_master.referensi_pekerjaan');
+        $this->db->delete('referensi_pekerjaan');
     }
 
     public function fetch_single_pekerjaan($id)
     {
         $this->db->where('id_pekerjaan', $id);
-        $query = $this->db->get('simrsj_master.referensi_pekerjaan');
+        $query = $this->db->get('referensi_pekerjaan');
         return $query->result();
     }
 
@@ -759,7 +759,7 @@ class Admin_model extends CI_Model
     public function make_query_hubungan()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_hubungan');
+        $this->db->from('referensi_hubungan');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('ket_hubungan', $_POST["search"]["value"]);
@@ -794,31 +794,31 @@ class Admin_model extends CI_Model
     public function get_all_data_hubungan()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_hubungan');
+        $this->db->from('referensi_hubungan');
         return $this->db->count_all_results();
     }
 
     public function tambah_hubungan($data)
     {
-        $this->db->insert('simrsj_master.referensi_hubungan', $data);
+        $this->db->insert('referensi_hubungan', $data);
     }
 
     public function edit_hubungan($id, $data)
     {
         $this->db->where('id_hubungan', $id);
-        $this->db->update('simrsj_master.referensi_hubungan', $data);
+        $this->db->update('referensi_hubungan', $data);
     }
 
     public function delete_hubungan($id)
     {
         $this->db->where('id_hubungan', $id);
-        $this->db->delete('simrsj_master.referensi_hubungan');
+        $this->db->delete('referensi_hubungan');
     }
 
     public function fetch_single_hubungan($id)
     {
         $this->db->where('id_hubungan', $id);
-        $query = $this->db->get('simrsj_master.referensi_hubungan');
+        $query = $this->db->get('referensi_hubungan');
         return $query->result();
     }
 
@@ -828,7 +828,7 @@ class Admin_model extends CI_Model
     public function make_query_profesi()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_profesi');
+        $this->db->from('referensi_profesi');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('ket_profesi', $_POST["search"]["value"]);
@@ -863,25 +863,25 @@ class Admin_model extends CI_Model
     public function get_all_data_profesi()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_profesi');
+        $this->db->from('referensi_profesi');
         return $this->db->count_all_results();
     }
 
     public function tambah_profesi($data)
     {
-        $this->db->insert('simrsj_master.referensi_profesi', $data);
+        $this->db->insert('referensi_profesi', $data);
     }
 
     public function edit_profesi($id, $data)
     {
         $this->db->where('id_profesi', $id);
-        $this->db->update('simrsj_master.referensi_profesi', $data);
+        $this->db->update('referensi_profesi', $data);
     }
 
     public function fetch_single_profesi($id)
     {
         $this->db->where('id_profesi', $id);
-        $query = $this->db->get('simrsj_master.referensi_profesi');
+        $query = $this->db->get('referensi_profesi');
         return $query->result();
     }
 
@@ -892,7 +892,7 @@ class Admin_model extends CI_Model
     public function make_query_wisma()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_wisma');
+        $this->db->from('referensi_wisma');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('nama_wisma', $_POST["search"]["value"]);
@@ -927,25 +927,25 @@ class Admin_model extends CI_Model
     public function get_all_data_wisma()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_wisma');
+        $this->db->from('referensi_wisma');
         return $this->db->count_all_results();
     }
 
     public function tambah_wisma($data)
     {
-        $this->db->insert('simrsj_master.referensi_wisma', $data);
+        $this->db->insert('referensi_wisma', $data);
     }
 
     public function edit_wisma($id, $data)
     {
         $this->db->where('id_wisma', $id);
-        $this->db->update('simrsj_master.referensi_wisma', $data);
+        $this->db->update('referensi_wisma', $data);
     }
 
     public function fetch_single_wisma($id)
     {
         $this->db->where('id_wisma', $id);
-        $query = $this->db->get('simrsj_master.referensi_wisma');
+        $query = $this->db->get('referensi_wisma');
         return $query->result();
     }
 
@@ -955,7 +955,7 @@ class Admin_model extends CI_Model
     public function make_query_kelas()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_kelas');
+        $this->db->from('referensi_kelas');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('nama_kelas', $_POST["search"]["value"]);
@@ -990,25 +990,25 @@ class Admin_model extends CI_Model
     public function get_all_data_kelas()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_kelas');
+        $this->db->from('referensi_kelas');
         return $this->db->count_all_results();
     }
 
     public function tambah_kelas($data)
     {
-        $this->db->insert('simrsj_master.referensi_kelas', $data);
+        $this->db->insert('referensi_kelas', $data);
     }
 
     public function edit_kelas($id, $data)
     {
         $this->db->where('id_kelas', $id);
-        $this->db->update('simrsj_master.referensi_kelas', $data);
+        $this->db->update('referensi_kelas', $data);
     }
 
     public function fetch_single_kelas($id)
     {
         $this->db->where('id_kelas', $id);
-        $query = $this->db->get('simrsj_master.referensi_kelas');
+        $query = $this->db->get('referensi_kelas');
         return $query->result();
     }
 
@@ -1019,7 +1019,7 @@ class Admin_model extends CI_Model
     public function make_query_penjamin()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_penjamin');
+        $this->db->from('referensi_penjamin');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('nama_penjamin', $_POST["search"]["value"]);
@@ -1054,25 +1054,25 @@ class Admin_model extends CI_Model
     public function get_all_data_penjamin()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_penjamin');
+        $this->db->from('referensi_penjamin');
         return $this->db->count_all_results();
     }
 
     public function tambah_penjamin($data)
     {
-        $this->db->insert('simrsj_master.referensi_penjamin', $data);
+        $this->db->insert('referensi_penjamin', $data);
     }
 
     public function edit_penjamin($id, $data)
     {
         $this->db->where('id_penjamin', $id);
-        $this->db->update('simrsj_master.referensi_penjamin', $data);
+        $this->db->update('referensi_penjamin', $data);
     }
 
     public function fetch_single_penjamin($id)
     {
         $this->db->where('id_penjamin', $id);
-        $query = $this->db->get('simrsj_master.referensi_penjamin');
+        $query = $this->db->get('referensi_penjamin');
         return $query->result();
     }
 
@@ -1082,7 +1082,7 @@ class Admin_model extends CI_Model
     public function make_query_satuan_labor()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_satuan_labor');
+        $this->db->from('referensi_satuan_labor');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('nama_satuan_labor', $_POST["search"]["value"]);
@@ -1117,25 +1117,25 @@ class Admin_model extends CI_Model
     public function get_all_data_satuan_labor()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_satuan_labor');
+        $this->db->from('referensi_satuan_labor');
         return $this->db->count_all_results();
     }
 
     public function tambah_satuan_labor($data)
     {
-        $this->db->insert('simrsj_master.referensi_satuan_labor', $data);
+        $this->db->insert('referensi_satuan_labor', $data);
     }
 
     public function edit_satuan_labor($id, $data)
     {
         $this->db->where('id_satuan_labor', $id);
-        $this->db->update('simrsj_master.referensi_satuan_labor', $data);
+        $this->db->update('referensi_satuan_labor', $data);
     }
 
     public function fetch_single_satuan_labor($id)
     {
         $this->db->where('id_satuan_labor', $id);
-        $query = $this->db->get('simrsj_master.referensi_satuan_labor');
+        $query = $this->db->get('referensi_satuan_labor');
         return $query->result();
     }
 
@@ -1145,7 +1145,7 @@ class Admin_model extends CI_Model
     public function make_query_grup_labor()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_kategori_tindakan_labor');
+        $this->db->from('referensi_kategori_tindakan_labor');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('nama_kategori_tindakan_labor', $_POST["search"]["value"]);
@@ -1180,25 +1180,25 @@ class Admin_model extends CI_Model
     public function get_all_data_grup_labor()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_kategori_tindakan_labor');
+        $this->db->from('referensi_kategori_tindakan_labor');
         return $this->db->count_all_results();
     }
 
     public function tambah_grup_labor($data)
     {
-        $this->db->insert('simrsj_master.referensi_kategori_tindakan_labor', $data);
+        $this->db->insert('referensi_kategori_tindakan_labor', $data);
     }
 
     public function edit_grup_labor($id, $data)
     {
         $this->db->where('id_kategori_tindakan_labor', $id);
-        $this->db->update('simrsj_master.referensi_kategori_tindakan_labor', $data);
+        $this->db->update('referensi_kategori_tindakan_labor', $data);
     }
 
     public function fetch_single_grup_labor($id)
     {
         $this->db->where('id_kategori_tindakan_labor', $id);
-        $query = $this->db->get('simrsj_master.referensi_kategori_tindakan_labor');
+        $query = $this->db->get('referensi_kategori_tindakan_labor');
         return $query->result();
     }
 
@@ -1209,7 +1209,7 @@ class Admin_model extends CI_Model
     public function make_query_bahan_radiologi()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_bahan_radiologi');
+        $this->db->from('referensi_bahan_radiologi');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('nama_bahan_radiologi', $_POST["search"]["value"]);
@@ -1244,25 +1244,25 @@ class Admin_model extends CI_Model
     public function get_all_data_bahan_radiologi()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_bahan_radiologi');
+        $this->db->from('referensi_bahan_radiologi');
         return $this->db->count_all_results();
     }
 
     public function tambah_bahan_radiologi($data)
     {
-        $this->db->insert('simrsj_master.referensi_bahan_radiologi', $data);
+        $this->db->insert('referensi_bahan_radiologi', $data);
     }
 
     public function edit_bahan_radiologi($id, $data)
     {
         $this->db->where('id_bahan_radiologi', $id);
-        $this->db->update('simrsj_master.referensi_bahan_radiologi', $data);
+        $this->db->update('referensi_bahan_radiologi', $data);
     }
 
     public function fetch_single_bahan_radiologi($id)
     {
         $this->db->where('id_bahan_radiologi', $id);
-        $query = $this->db->get('simrsj_master.referensi_bahan_radiologi');
+        $query = $this->db->get('referensi_bahan_radiologi');
         return $query->result();
     }
 
@@ -1274,7 +1274,7 @@ class Admin_model extends CI_Model
     public function make_query_cara_keluar()
     {
         $this->db->select('*');
-        $this->db->from('simrsj_master.referensi_cara_keluar');
+        $this->db->from('referensi_cara_keluar');
 
         if (isset($_POST["search"]["value"])) {
             $this->db->like('cara_keluar', $_POST["search"]["value"]);
@@ -1309,25 +1309,25 @@ class Admin_model extends CI_Model
     public function get_all_data_cara_keluar()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.referensi_cara_keluar');
+        $this->db->from('referensi_cara_keluar');
         return $this->db->count_all_results();
     }
 
     public function tambah_cara_keluar($data)
     {
-        $this->db->insert('simrsj_master.referensi_cara_keluar', $data);
+        $this->db->insert('referensi_cara_keluar', $data);
     }
 
     public function edit_cara_keluar($id, $data)
     {
         $this->db->where('id_cara_keluar', $id);
-        $this->db->update('simrsj_master.referensi_cara_keluar', $data);
+        $this->db->update('referensi_cara_keluar', $data);
     }
 
     public function fetch_single_cara_keluar($id)
     {
         $this->db->where('id_cara_keluar', $id);
-        $query = $this->db->get('simrsj_master.referensi_cara_keluar');
+        $query = $this->db->get('referensi_cara_keluar');
         return $query->result();
     }
     // ------------------------------------------------------------- END REFERENSI 
@@ -1375,7 +1375,7 @@ class Admin_model extends CI_Model
     public function get_all_data_pegawai()
     {
         $this->db->select("*");
-        $this->db->from('simrsj_master.pegawai');
+        $this->db->from('pegawai');
         return $this->db->count_all_results();
     }
 
@@ -1384,44 +1384,44 @@ class Admin_model extends CI_Model
 
     public function tambah_pegawai($data)
     {
-        $this->db->insert('simrsj_master.pegawai', $data);
+        $this->db->insert('pegawai', $data);
     }
 
     public function tambah_user($data)
     {
-        $this->db->insert('simrsj_aplikasi.user', $data);
+        $this->db->insert('user', $data);
     }
 
     public function edit_pegawai($id, $data)
     {
         $this->db->where('id_pegawai', $id);
-        $this->db->update('simrsj_master.pegawai', $data);
+        $this->db->update('pegawai', $data);
     }
 
     public function edit_user($id, $data)
     {
         $this->db->where('id_user', $id);
-        $this->db->update('simrsj_aplikasi.user', $data);
+        $this->db->update('user', $data);
     }
 
     public function delete_pegawai($id)
     {
         $this->db->where('id_pegawai', $id);
-        $this->db->delete('simrsj_master.pegawai');
+        $this->db->delete('pegawai');
     }
 
     public function fetch_single_pegawai($id)
     {
         $this->db->where('id_pegawai', $id);
-        $query = $this->db->get('simrsj_master.pegawai');
+        $query = $this->db->get('pegawai');
         return $query->result();
     }
 
     public function fetch_single_user($id)
     {
         $this->db->where('pegawai.id_pegawai', $id);
-        $this->db->join('simrsj_aplikasi.user', 'user.pegawai_id = pegawai.id_pegawai', 'LEFT');
-        $query = $this->db->get('simrsj_master.pegawai');
+        $this->db->join('user', 'user.pegawai_id = pegawai.id_pegawai', 'LEFT');
+        $query = $this->db->get('pegawai');
         return $query->result();
     }
     // ------------------------------------------------------------- END TAMBAH PEGAWAI

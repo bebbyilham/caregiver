@@ -207,12 +207,12 @@ class Pasien extends MX_Controller
                               <span class="small p-3 font-weight-bold text-dark">' . $row->nama . '</span>
                                 <a class="dropdown-item aktivitas" href="' . base_url('pasien/aktivitas/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '" >Aktivitas</a>
                                 <a class="dropdown-item keadaan_pasien" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '" >Keadaan Pasien</a>
-                                <a class="dropdown-item tanda_vital" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Tanda Vital</a>
-                                <a class="dropdown-item catatan_perkembangan" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Catatan Perkembangan</a>
-                                <a class="dropdown-item medikasi" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Medikasi</a>
-                                <a class="dropdown-item pemantauan_alat_medik" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Pemantauan Alat Medik</a>
-                                <a class="dropdown-item integritas_kulit" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Integritas Kulit</a>
-                                <a class="dropdown-item hasil_lab_penunjang" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
+                                <a class="dropdown-item tanda_vital" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Tanda Vital</a>
+                                <a class="dropdown-item catatan_perkembangan" href="' . base_url('pasien/catatanperkembangan/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Catatan Perkembangan</a>
+                                <a class="dropdown-item medikasi" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Medikasi</a>
+                                <a class="dropdown-item pemantauan_alat_medik" href="' . base_url('pasien/pemantauanalatmedik/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Pemantauan Alat Medik</a>
+                                <a class="dropdown-item integritas_kulit" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Integritas Kulit</a>
+                                <a class="dropdown-item hasil_lab_penunjang" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
                             </div>
             </div>
             </div>
@@ -346,6 +346,297 @@ class Pasien extends MX_Controller
             "draw"                => intval($_POST['draw']),
             "recordsTotal"        => $this->Pasien_model->get_all_data_aktivitas(),
             "recordsFiltered"     => $this->Pasien_model->get_filtered_data_aktivitas(),
+            "data"                => $data
+        );
+        echo json_encode($output);
+    }
+
+    public function tandavital($id, $idpasien)
+    {
+        $data['title'] = 'Tanda Vital Pasien';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
+        $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/tanda_vital';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+
+    public function simpantandavital()
+    {
+        $notransaksi = 'TV' . date("ymdhis");
+        $data_tanda_vital = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'id_rawatan'             => $_POST['id_rawatan'],
+            'no_transaksi'          => $notransaksi,
+            'sistolik'                    => $_POST['sistolik'],
+            'diastolik'                 => $_POST['diastolik'],
+            'suhu'        => $_POST['suhu'],
+            'nadi'                => $_POST['nadi'],
+            'pernapasan'              => $_POST['pernapasan'],
+            'status'                => 1,
+        );
+        $data_transaksi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'status'                => 1,
+        );
+
+        $this->Pasien_model->simpan_tanda_vital($data_tanda_vital);
+        $this->Pasien_model->simpan_transaksi($data_transaksi);
+        echo json_encode([
+            'tanda_vital' => $data_tanda_vital,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function hapustanda_vital()
+    {
+
+        $data_tanda_vital = array(
+            'status'                => $_POST['status'],
+        );
+        $data_transaksi = array(
+            'status'                => $_POST['status'],
+        );
+
+        $this->Pasien_model->update_tanda_vital($data_tanda_vital, $_POST['id']);
+        $this->Pasien_model->update_transaksi($data_transaksi, $_POST['notransaksi']);
+        echo json_encode([
+            'tanda_vital' => $data_tanda_vital,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function tabeltanda_vital()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_tanda_vital();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $sub_array[] = '
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
+            $sub_array[] = $no;
+            $sub_array[] = $row->created_at;
+            if ($row->sistolik < 60 || $row->sistolik > 130) {
+                $sistolik = '<span class="badge badge-danger">' . $row->sistolik . ' - SISTOLIK</span>';
+            } else {
+                $sistolik = '<span class="badge badge-success">' . $row->sistolik . ' - SISTOLIK</span>';
+            }
+            if ($row->diastolik < 60 || $row->diastolik > 100) {
+                $diastolik = '<span class="badge badge-danger">' . $row->diastolik . ' - DIASTOLIK</span>';
+            } else {
+                $diastolik = '<span class="badge badge-success">' . $row->diastolik . ' - DIASTOLIK</span>';
+            }
+            if ($row->suhu < 36 || $row->suhu > 37.5) {
+                $suhu = '<span class="badge badge-danger">' . $row->suhu . ' - suhu</span>';
+            } else {
+                $suhu = '<span class="badge badge-success">' . $row->suhu . ' - suhu</span>';
+            }
+            if ($row->nadi < 60 || $row->nadi > 100) {
+                $nadi = '<span class="badge badge-danger">' . $row->nadi . ' - nadi</span>';
+            } else {
+                $nadi = '<span class="badge badge-success">' . $row->nadi . ' - nadi</span>';
+            }
+            if ($row->pernapasan < 10 || $row->pernapasan > 20) {
+                $pernapasan = '<span class="badge badge-danger">' . $row->pernapasan . ' - pernapasan</span>';
+            } else {
+                $pernapasan = '<span class="badge badge-success">' . $row->pernapasan . ' - pernapasan</span>';
+            }
+            $sub_array[] = '<div>'
+                . $sistolik . '<br>'
+                . $diastolik . '<br>'
+                . $suhu . '<br>'
+                . $nadi . '<br>'
+                . $pernapasan . '<br></div>';
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_tanda_vital(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_tanda_vital(),
+            "data"                => $data
+        );
+        echo json_encode($output);
+    }
+
+    public function pemantauanalatmedik($id, $idpasien)
+    {
+        $data['title'] = 'Pemantauan Alat Medik Pasien';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
+        $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/pemantauan_alat_medik';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+
+    public function simpanpemantauanalatmedik()
+    {
+        $notransaksi = 'PA' . date("ymdhis");
+        $data_pemantauanalatmedik = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'id_rawatan'             => $_POST['id_rawatan'],
+            'no_transaksi'          => $notransaksi,
+            'id_alat_medik'                    => $_POST['alat_medik'],
+            'ukuran'                 => $_POST['ukuran'],
+            'keterangan'        => $_POST['keterangan'],
+            'tanggal_pemasangan'                => $_POST['tanggal_pemasangan'],
+            'nm_alat_medik'              => $_POST['nm_alat_medik'],
+            'status'                => 1,
+        );
+        $data_transaksi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'status'                => 1,
+        );
+
+        $this->Pasien_model->simpan_pemantauanalatmedik($data_pemantauanalatmedik);
+        $this->Pasien_model->simpan_transaksi($data_transaksi);
+        echo json_encode([
+            'pemantauanalatmedik' => $data_pemantauanalatmedik,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function hapuspemantauanalatmedik()
+    {
+
+        $data_pemantauanalatmedik = array(
+            'status'                => $_POST['status'],
+        );
+        $data_transaksi = array(
+            'status'                => $_POST['status'],
+        );
+
+        $this->Pasien_model->update_pemantauanalatmedik($data_pemantauanalatmedik, $_POST['id']);
+        $this->Pasien_model->update_transaksi($data_transaksi, $_POST['notransaksi']);
+        echo json_encode([
+            'pemantauanalatmedik' => $data_pemantauanalatmedik,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function tabelpemantauanalatmedik()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_pemantauanalatmedik();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $sub_array[] = '
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
+            $sub_array[] = $no;
+            $sub_array[] = $row->tanggal_pemasangan;
+            $sub_array[] = $row->nm_alat_medik;
+            $sub_array[] = $row->ukuran;
+            $sub_array[] = $row->keterangan;
+
+
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_pemantauanalatmedik(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_pemantauanalatmedik(),
+            "data"                => $data
+        );
+        echo json_encode($output);
+    }
+
+    public function catatanperkembangan($id, $idpasien)
+    {
+        $data['title'] = 'Catatan Perkembangan Pasien';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
+        $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/catatan_perkembangan';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+
+    public function simpancatatanperkembangan()
+    {
+        $notransaksi = 'CP' . date("ymdhis");
+        $data_catatan_perkembangan = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'id_rawatan'             => $_POST['id_rawatan'],
+            'no_transaksi'          => $notransaksi,
+            'catatan'                    => $_POST['catatan'],
+            'id_petugas'                    => $_POST['petugas'],
+            'status'                => 1,
+        );
+        $data_transaksi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'status'                => 1,
+        );
+
+        $this->Pasien_model->simpan_catatan_perkembangan($data_catatan_perkembangan);
+        $this->Pasien_model->simpan_transaksi($data_transaksi);
+        echo json_encode([
+            'catatan_perkembangan' => $data_catatan_perkembangan,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function hapuscatatanperkembangan()
+    {
+
+        $data_catatan_perkembangan = array(
+            'status'                => $_POST['status'],
+        );
+        $data_transaksi = array(
+            'status'                => $_POST['status'],
+        );
+
+        $this->Pasien_model->update_catatan_perkembangan($data_catatan_perkembangan, $_POST['id']);
+        $this->Pasien_model->update_transaksi($data_transaksi, $_POST['notransaksi']);
+        echo json_encode([
+            'catatan_perkembangan' => $data_catatan_perkembangan,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function tabelcatatanperkembangan()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_catatan_perkembangan();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $sub_array[] = '
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
+            $sub_array[] = $no;
+            $sub_array[] = '<span class="badge badge-primary">' . $row->gelar_depan . ' ' . $row->nama_pegawai . ' ' . $row->gelar_belakang . '</span><br>
+            <span class="badge badge-warning">' . $row->created_at . '</span>';
+            $sub_array[] = $row->catatan;
+
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_catatan_perkembangan(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_catatan_perkembangan(),
             "data"                => $data
         );
         echo json_encode($output);

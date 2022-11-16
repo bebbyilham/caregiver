@@ -188,16 +188,223 @@
         }
         //end aktivitas
 
+        //tabel tanda_vital
+        var $order_column_tanda_vital = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_tanda_vital()
+        {
+            // $id_tanda_vital = $_POST['idpasien'];
+            $this->db->select('
+            tanda_vital.id AS id,
+            tanda_vital.id_pasien AS id_pasien,
+            tanda_vital.id_rawatan AS id_rawatan,
+            tanda_vital.no_transaksi AS no_transaksi,
+            tanda_vital.sistolik AS sistolik,
+            tanda_vital.diastolik AS diastolik,
+            tanda_vital.suhu AS suhu,
+            tanda_vital.nadi AS nadi,
+            tanda_vital.pernapasan AS pernapasan,
+            tanda_vital.status AS status,
+            tanda_vital.created_at AS created_at,
+            tanda_vital.updated_at AS updated_at
+            ');
+            $this->db->where('id_rawatan', $_POST['id_rawatan']);
+            $this->db->where('status !=', 99);
+            $this->db->from('tanda_vital');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('created_at', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('tanda_vital.created_at', 'DESC');
+            }
+        }
+
+
+        public function make_datatables_tanda_vital()
+        {
+            $this->make_query_tanda_vital();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_tanda_vital()
+        {
+            $this->make_query_tanda_vital();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_tanda_vital()
+        {
+            $this->db->select("*");
+            $this->db->from('tanda_vital');
+            return $this->db->count_all_results();
+        }
+        //end tanda_vital
+
+        //tabel pemantauanalatmedik
+        var $order_column_pemantauanalatmedik = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_pemantauanalatmedik()
+        {
+            // $id_pemantauanalatmedik = $_POST['idpasien'];
+            $this->db->select('
+            pemantauan_alat_medik.id AS id,
+            pemantauan_alat_medik.id_pasien AS id_pasien,
+            pemantauan_alat_medik.id_rawatan AS id_rawatan,
+            pemantauan_alat_medik.no_transaksi AS no_transaksi,
+            pemantauan_alat_medik.id_alat_medik AS id_alat_medik,
+            pemantauan_alat_medik.ukuran AS ukuran,
+            pemantauan_alat_medik.tanggal_pemasangan AS tanggal_pemasangan,
+            pemantauan_alat_medik.nm_alat_medik AS nm_alat_medik,
+            pemantauan_alat_medik.keterangan AS keterangan,
+            pemantauan_alat_medik.status AS status,
+            pemantauan_alat_medik.created_at AS created_at,
+            pemantauan_alat_medik.updated_at AS updated_at
+            ');
+            $this->db->where('id_rawatan', $_POST['id_rawatan']);
+            $this->db->where('status !=', 99);
+            $this->db->from('pemantauan_alat_medik');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('created_at', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('pemantauan_alat_medik.created_at', 'DESC');
+            }
+        }
+
+
+        public function make_datatables_pemantauanalatmedik()
+        {
+            $this->make_query_pemantauanalatmedik();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_pemantauanalatmedik()
+        {
+            $this->make_query_pemantauanalatmedik();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_pemantauanalatmedik()
+        {
+            $this->db->select("*");
+            $this->db->from('pemantauan_alat_medik');
+            return $this->db->count_all_results();
+        }
+        //end pemantauanalatmedik
+
+        //tabel catatan_perkembangan
+        var $order_column_catatan_perkembangan = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_catatan_perkembangan()
+        {
+            // $id_catatan_perkembangan = $_POST['idpasien'];
+            $this->db->select('
+            catatan_perkembangan.id AS id,
+            catatan_perkembangan.id_pasien AS id_pasien,
+            catatan_perkembangan.id_rawatan AS id_rawatan,
+            catatan_perkembangan.no_transaksi AS no_transaksi,
+            catatan_perkembangan.id_petugas AS id_petugas,
+            pegawai.nama_pegawai AS nama_pegawai,
+            pegawai.gelar_depan AS gelar_depan,
+            pegawai.gelar_belakang AS gelar_belakang,
+            catatan_perkembangan.catatan AS catatan,
+            catatan_perkembangan.created_at AS created_at,
+            catatan_perkembangan.updated_at AS updated_at
+            ');
+            $this->db->where('id_rawatan', $_POST['id_rawatan']);
+            $this->db->where('status !=', 99);
+            $this->db->from('catatan_perkembangan');
+            $this->db->join('pegawai', 'pegawai.id_pegawai = catatan_perkembangan.id_petugas', 'LEFT');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('created_at', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('catatan_perkembangan.created_at', 'DESC');
+            }
+        }
+
+
+        public function make_datatables_catatan_perkembangan()
+        {
+            $this->make_query_catatan_perkembangan();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_catatan_perkembangan()
+        {
+            $this->make_query_catatan_perkembangan();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_catatan_perkembangan()
+        {
+            $this->db->select("*");
+            $this->db->from('catatan_perkembangan');
+            return $this->db->count_all_results();
+        }
+        //end catatan_perkembangan
+
         public function update_aktivitas($data, $id)
         {
             $this->db->where('id', $id);
             $this->db->update('aktivitas', $data);
         }
 
+        public function update_tanda_vital($data, $id)
+        {
+            $this->db->where('id', $id);
+            $this->db->update('tanda_vital', $data);
+        }
+
         public function update_transaksi($data, $id)
         {
             $this->db->where('no_transaksi', $id);
             $this->db->update('transaksi', $data);
+        }
+
+        public function update_pemantauanalatmedik($data, $id)
+        {
+            $this->db->where('no_transaksi', $id);
+            $this->db->update('pemantauan_alat_medik', $data);
+        }
+
+        public function update_catatan_perkembangan($data, $id)
+        {
+            $this->db->where('id', $id);
+            $this->db->update('catatan_perkembangan', $data);
         }
 
         //image blog
@@ -262,6 +469,20 @@
         public function simpan_aktivitas($data)
         {
             $this->db->insert('aktivitas', $data);
+        }
+
+        public function simpan_tanda_vital($data)
+        {
+            $this->db->insert('tanda_vital', $data);
+        }
+
+        public function simpan_pemantauanalatmedik($data)
+        {
+            $this->db->insert('pemantauan_alat_medik', $data);
+        }
+        public function simpan_catatan_perkembangan($data)
+        {
+            $this->db->insert('catatan_perkembangan', $data);
         }
 
 
