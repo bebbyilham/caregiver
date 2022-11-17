@@ -1419,7 +1419,7 @@ class Admin extends MX_Controller
 
     public function getRole()
     {
-        $data = $this->db->order_by('role', 'ASC')->get('simrsj_aplikasi.user_role')->result();
+        $data = $this->db->order_by('role', 'ASC')->get('user_role')->result();
         echo json_encode($data);
     }
 

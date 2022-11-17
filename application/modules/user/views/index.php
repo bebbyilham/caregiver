@@ -1,5 +1,5 @@
   <!-- Header -->
-  <div class="header bg-primary pb-6">
+  <div class="header bg-gradient-primary pb-6">
       <div class="container-fluid">
           <div class="header-body">
               <div class="row align-items-center py-4">
@@ -35,7 +35,7 @@
       </div>
       <div class="card">
           <div class="mx-auto my-4" style="width: 10rem;">
-              <img src="<?= base_url('assets/img/profile/') . $user['image']; ?>" class="card-img mb-4 rounded-circle">
+              <img src="<?= base_url('assets/img/'); ?>default.png" class="card-img mb-4 rounded-circle">
           </div>
           <div class="text-center">
               <div class="col">

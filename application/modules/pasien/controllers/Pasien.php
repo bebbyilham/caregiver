@@ -211,7 +211,7 @@ class Pasien extends MX_Controller
                                 <a class="dropdown-item catatan_perkembangan" href="' . base_url('pasien/catatanperkembangan/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Catatan Perkembangan</a>
                                 <a class="dropdown-item medikasi" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Medikasi</a>
                                 <a class="dropdown-item pemantauan_alat_medik" href="' . base_url('pasien/pemantauanalatmedik/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Pemantauan Alat Medik</a>
-                                <a class="dropdown-item integritas_kulit" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Integritas Kulit</a>
+                                <a class="dropdown-item integritas_kulit" href="' . base_url('pasien/integritaskulit/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Integritas Kulit</a>
                                 <a class="dropdown-item hasil_lab_penunjang" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
                             </div>
             </div>
@@ -624,7 +624,7 @@ class Pasien extends MX_Controller
             $no++;
             $sub_array = array();
             $sub_array[] = '
-            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" file="' . $row->file_name . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
             $sub_array[] = $no;
             $sub_array[] = '<span class="badge badge-primary">' . $row->gelar_depan . ' ' . $row->nama_pegawai . ' ' . $row->gelar_belakang . '</span><br>
             <span class="badge badge-warning">' . $row->created_at . '</span>';
@@ -637,6 +637,113 @@ class Pasien extends MX_Controller
             "draw"                => intval($_POST['draw']),
             "recordsTotal"        => $this->Pasien_model->get_all_data_catatan_perkembangan(),
             "recordsFiltered"     => $this->Pasien_model->get_filtered_data_catatan_perkembangan(),
+            "data"                => $data
+        );
+        echo json_encode($output);
+    }
+
+    public function integritaskulit($id, $idpasien)
+    {
+        $data['title'] = 'Integritas Kulit Pasien';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
+        $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/integritas_kulit';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+
+    public function simpanintegritaskulit()
+    {
+        $config['upload_path']          = './assets/img/kulit/';
+        $config['allowed_types']        = 'jpeg|jpg|png';
+        $config['max_size']             = '6024'; // 6024KB
+        $config['encrypt_name']            = TRUE;
+
+        $this->load->library('upload', $config);
+
+        $this->upload->do_upload('upload_kondisi');
+        $filename = $this->upload->data("file_name");
+        // $data = array(
+
+        //     'image'                 => base_url('assets/img/image_blog/') . $filename,
+        //     'file_name'                 => $filename,
+        //     'blog_id'                 => $this->input->post('id_blog')
+        // );
+        $notransaksi = 'IK' . date("ymdhis");
+        $data_integritas_kulit = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'id_rawatan'             => $_POST['id_rawatan'],
+            'no_transaksi'          => $notransaksi,
+            'image'                 => base_url('assets/img/kulit/') . $filename,
+            'file_name'                 => $filename,
+            'kondisi_kulit'             => $_POST['kondisi_kulit'],
+            'perawatan_kulit'             => $_POST['perawatan_kulit'],
+            'status'                => 1,
+        );
+        $data_transaksi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'status'                => 1,
+        );
+
+        $this->Pasien_model->simpan_integritas_kulit($data_integritas_kulit);
+        $this->Pasien_model->simpan_transaksi($data_transaksi);
+        echo json_encode([
+            'integritas_kulit' => $data_integritas_kulit,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function hapusintegritaskulit()
+    {
+        $file = $_POST['file'];
+        unlink(FCPATH . 'assets/img/kulit/' . $file);
+
+        $data_integritas_kulit = array(
+            'status'                => $_POST['status'],
+        );
+        $data_transaksi = array(
+            'status'                => $_POST['status'],
+        );
+
+        $this->Pasien_model->update_integritas_kulit($data_integritas_kulit, $_POST['id']);
+        $this->Pasien_model->update_transaksi($data_transaksi, $_POST['notransaksi']);
+        echo json_encode([
+            'integritas_kulit' => $data_integritas_kulit,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function tabelintegritaskulit()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_integritas_kulit();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $sub_array[] = '
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a><br>
+            <a href="#" class="fa fa-camera ml-2 mr-2 text-primary foto_kulit" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" fotokulit="' . $row->image . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
+            $sub_array[] = $no;
+            // $sub_array[] = '<span class="badge badge-primary">' . $row->gelar_depan . ' ' . $row->nama_pegawai . ' ' . $row->gelar_belakang . '</span><br>
+            // <span class="badge badge-warning">' . $row->created_at . '</span>';
+            $sub_array[] = $row->created_at;
+            $sub_array[] = $row->kondisi_kulit;
+            $sub_array[] = $row->perawatan_kulit;
+
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_integritas_kulit(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_integritas_kulit(),
             "data"                => $data
         );
         echo json_encode($output);

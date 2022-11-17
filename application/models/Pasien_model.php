@@ -376,6 +376,67 @@
             return $this->db->count_all_results();
         }
         //end catatan_perkembangan
+        //tabel integritas_kulit
+        var $order_column_integritas_kulit = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_integritas_kulit()
+        {
+            // $id_integritas_kulit = $_POST['idpasien'];
+            $this->db->select('
+            integritas_kulit.id AS id,
+            integritas_kulit.id_pasien AS id_pasien,
+            integritas_kulit.id_rawatan AS id_rawatan,
+            integritas_kulit.no_transaksi AS no_transaksi,
+            integritas_kulit.kondisi_kulit AS kondisi_kulit,
+            integritas_kulit.perawatan_kulit AS perawatan_kulit,
+            integritas_kulit.image AS image,
+            integritas_kulit.file_name AS file_name,
+            integritas_kulit.created_at AS created_at,
+            integritas_kulit.updated_at AS updated_at
+            ');
+            $this->db->where('id_rawatan', $_POST['id_rawatan']);
+            $this->db->where('status !=', 99);
+            $this->db->from('integritas_kulit');
+            // $this->db->join('pegawai', 'pegawai.id_pegawai = integritas_kulit.id_petugas', 'LEFT');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('created_at', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('integritas_kulit.created_at', 'DESC');
+            }
+        }
+
+
+        public function make_datatables_integritas_kulit()
+        {
+            $this->make_query_integritas_kulit();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_integritas_kulit()
+        {
+            $this->make_query_integritas_kulit();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_integritas_kulit()
+        {
+            $this->db->select("*");
+            $this->db->from('integritas_kulit');
+            return $this->db->count_all_results();
+        }
+        //end integritas_kulit
 
         public function update_aktivitas($data, $id)
         {
@@ -391,13 +452,13 @@
 
         public function update_transaksi($data, $id)
         {
-            $this->db->where('no_transaksi', $id);
+            $this->db->where('id', $id);
             $this->db->update('transaksi', $data);
         }
 
         public function update_pemantauanalatmedik($data, $id)
         {
-            $this->db->where('no_transaksi', $id);
+            $this->db->where('id', $id);
             $this->db->update('pemantauan_alat_medik', $data);
         }
 
@@ -405,6 +466,12 @@
         {
             $this->db->where('id', $id);
             $this->db->update('catatan_perkembangan', $data);
+        }
+
+        public function update_integritas_kulit($data, $id)
+        {
+            $this->db->where('id', $id);
+            $this->db->update('integritas_kulit', $data);
         }
 
         //image blog
@@ -483,6 +550,10 @@
         public function simpan_catatan_perkembangan($data)
         {
             $this->db->insert('catatan_perkembangan', $data);
+        }
+        public function simpan_integritas_kulit($data)
+        {
+            $this->db->insert('integritas_kulit', $data);
         }
 
 
