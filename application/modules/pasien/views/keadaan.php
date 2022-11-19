@@ -135,7 +135,7 @@
                     <th>#</th>
                     <th>No.</th>
                     <th>Waktu</th>
-                    <th>Total Skor</th>
+                    <th>Keadaan</th>
                   </tr>
                 </thead>
               </table>

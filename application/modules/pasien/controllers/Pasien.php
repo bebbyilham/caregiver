@@ -72,7 +72,7 @@ class Pasien extends MX_Controller
             } else {
                 $jk = 'Perempuan';
             }
-            $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari";
+            $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->no_mr . "<br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari";
             $sub_array[] = substr($row->alamat, 0, 25);
 
             $sub_array[] = $row->notelp1 . "<br>" . $row->notelp2;
@@ -111,9 +111,16 @@ class Pasien extends MX_Controller
 
     public function simpanpasien()
     {
+        $last_row = $this->db->select('no_mr')->order_by('id', "desc")->limit(1)->get('pasien')->result();
+        foreach ($last_row as $row) {
+            $output = sprintf("%06d", $row->no_mr + 1);
+        }
+        $no_mr = $output;
+
         $data = array(
             'nama'          => $_POST['nama'],
             'nik'          => $_POST['nik'],
+            'no_mr'          => $no_mr,
             'jenis_kelamin'  => $_POST['jeniskelamin'],
             'tanggal_lahir'  => $_POST['tanggallahir'],
             'alamat'        => $_POST['alamat'],
@@ -214,7 +221,10 @@ class Pasien extends MX_Controller
                                 <a class="dropdown-item integritas_kulit" href="' . base_url('pasien/integritaskulit/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Integritas Kulit</a>
                                 <a class="dropdown-item hasil_lab_penunjang" href="' . base_url('pasien/hasillab/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
                             </div>
-            </div>
+            </div><br><br>
+            <a class="text-primary" href="' . base_url('pasien/cetakresume/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '"  id="print_rawatan">
+                                <i class="fas fa-print mr-2"></i>
+            </a>
             </div>
             ';
             // $sub_array[] = $no;
@@ -223,7 +233,7 @@ class Pasien extends MX_Controller
             } else {
                 $jk = 'Perempuan';
             }
-            $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari <br>" . $row->created_at;
+            $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->no_mr . "<br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari <br>" . $row->created_at;
             $sub_array[] = $row->diagnosa_sakit;
 
             $sub_array[] = "<b>" . $row->barthel_index_score . "</b><br>" . $row->barthel_index_score_date;
@@ -932,9 +942,9 @@ class Pasien extends MX_Controller
             $sub_array[] = $row->created_at;
             $sub_array[] =
                 '<div>
-            <span>' . $row->keadaan_pasien_e . ' - ' . $row->text_keadaan_pasien_e . '</span><br>
-            <span>' . $row->keadaan_pasien_v . ' - ' . $row->text_keadaan_pasien_v . '</span><br>
-            <span>' . $row->keadaan_pasien_m . ' - ' . $row->text_keadaan_pasien_m . '</span><br>
+            <span class="font-weight-bold"> E :  </span><span>' . $row->keadaan_pasien_e . ' - ' . $row->text_keadaan_pasien_e . '</span><br>
+            <span class="font-weight-bold"> V :  </span><span>' . $row->keadaan_pasien_v . ' - ' . $row->text_keadaan_pasien_v . '</span><br>
+            <span class="font-weight-bold"> M :  </span><span>' . $row->keadaan_pasien_m . ' - ' . $row->text_keadaan_pasien_m . '</span><br>
             <span class="font-weight-bold"> GJS : </span><span>' . $row->keadaan_pasien_gjs . '</span><br>
             <span class="font-weight-bold"> Kesadaran : </span><span>' . $row->text_kesadaran . '</span><br>
             </div>
@@ -1066,6 +1076,21 @@ class Pasien extends MX_Controller
             "data"                => $data
         );
         echo json_encode($output);
+    }
+
+    public function cetakresume($id, $idpasien)
+    {
+        $data['title'] = 'Resume Medis';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
+        $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+        $data['idrawatan'] = $id;
+        $data['idpasien'] = $idpasien;
+
+        $data['content'] = '';
+        $page = 'pasien/cetakresume';
+        $this->load->view($page, $data);
     }
 
     public function ubahstatusblog()

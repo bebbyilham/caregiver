@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Caregiver | Selamat Datang</title>
-    <link rel="shortcut icon" href="<?= base_url(); ?>assets/logo/favicon.ico">
+    <link rel="icon" href="<?= base_url(); ?>assets/icons/logo.png" type="image/png">
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">

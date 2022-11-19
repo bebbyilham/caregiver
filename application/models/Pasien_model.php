@@ -66,6 +66,8 @@
             rawatan.updated_at AS updated_at,
             pasien.nama AS nama,
             pasien.nik AS nik,
+            pasien.no_mr AS no_mr,
+            pasien.no_mr AS no_mr,
             pasien.tanggal_lahir AS tanggal_lahir,
             pasien.jenis_kelamin AS jenis_kelamin
             ');
