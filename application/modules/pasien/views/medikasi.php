@@ -44,51 +44,50 @@
                 <h3 class="mb-0"><?= $pasien['nama'] ?></h3><span><?= '(' . $jk . ' - ' . $y . ' Tahun ' . $m . ' Bulan ' . $d . ' Hari)' ?></span>
               </div>
               <div class="col-4 text-right">
-                <button type="button" id="simpan_catatan_perkembangan" class="btn btn-sm btn-primary">Simpan</button>
+                <button type="button" id="simpan_medikasi" class="btn btn-sm btn-primary">Simpan</button>
               </div>
             </div>
           </div>
           <div class="card-body">
             <form>
-              <h6 class="heading-small text-muted mb-4">Data Catatan Perkembangan Pasien</h6>
+              <h6 class="heading-small text-muted mb-4">Data Medikasi Pasien</h6>
               <div class="pl-4">
                 <div class="row">
                   <div class="col-12">
                     <div class="form-group">
-                      <label class="form-control-label" for="catatan">Catatan</label>
-                      <textarea class="form-control" id="catatan" rows="3"></textarea>
+                      <label class="form-control-label" for="nama_obat">Nama Obat</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="nama_obat" name="nama_obat" autocomplete="on">
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-12">
+                  <div class="col-lg-6 col-12">
                     <div class="form-group">
-                      <label class="form-control-label" for="soap_s">S</label>
-                      <textarea class="form-control" id="soap_s" rows="1"></textarea>
+                      <label class="form-control-label" for="tanggal_medikasi">Tanggal Medikasi</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="tanggal_medikasi" name="tanggal_medikasi" placeholder="Pilih Tanggal..." value="<?= date('Y-m-d') ?>" autocomplete="off">
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <span class="fa fa-calendar-alt"></span>
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
+
+                  <div class="col-lg-6 col-12">
                     <div class="form-group">
-                      <label class="form-control-label" for="soap_o">O</label>
-                      <textarea class="form-control" id="soap_o" rows="1"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="form-group">
-                      <label class="form-control-label" for="soap_a">A</label>
-                      <textarea class="form-control" id="soap_a" rows="1"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="form-group">
-                      <label class="form-control-label" for="soap_p">P</label>
-                      <textarea class="form-control" id="soap_p" rows="1"></textarea>
+                      <label class="form-control-label" for="jam_medikasi">Jam Medikasi</label>
+                      <div class="input-group">
+                        <input id="jam_medikasi" name="jam_medikasi" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="HH:MM" data-mask>
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <span class="fa fa-clock"></span>
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -103,7 +102,7 @@
       <div class="col">
         <div class="card shadow-sm">
           <div class="card-header">
-            <h3 class="card-title">Data Catatan Perkembangan Pasien</h3>
+            <h3 class="card-title">Data Medikasi Pasien</h3>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -112,8 +111,8 @@
                   <tr>
                     <th>#</th>
                     <th>No.</th>
-                    <th>Petugas</th>
-                    <th>Catatan</th>
+                    <th>Waktu Pemberian</th>
+                    <th>Nama Obat</th>
                   </tr>
                 </thead>
               </table>
@@ -138,24 +137,17 @@
     </div>
     <script>
       $(document).ready(function() {
-        $('#tanggal_pemasangan').datetimepicker({
+        $('#tanggal_medikasi').datetimepicker({
           timepicker: false,
           datepicker: true,
-          scrollInput: false,
+          scrollInput: true,
           theme: 'success',
           format: 'Y-m-d',
           maxDate: '+2y',
         });
         $('#loading').hide();
         //   $("#deskripsi").summernote('code', '');
-        $('#description').summernote({
-          toolbar: [
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['fontsize', ['fontsize']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-          ],
-        });
+
 
 
         // DataTable
@@ -165,7 +157,7 @@
           "pageLength": 25,
           "order": [],
           "ajax": {
-            "url": "<?php echo base_url(); ?>pasien/tabelcatatanperkembangan",
+            "url": "<?php echo base_url(); ?>pasien/tabelmedikasi",
             "type": "POST",
             "data": function(data) {
               data.id_rawatan = '<?= $rawatan['id'] ?>'
@@ -186,18 +178,16 @@
         });
 
         // Edit Pegawai
-        $('#simpan_catatan_perkembangan').on('click', function() {
+        $('#simpan_medikasi').on('click', function() {
           var id_pasien = '<?= $pasien['id'] ?>'
           var id_rawatan = '<?= $rawatan['id'] ?>'
           var petugas = '<?= $user['pegawai_id'] ?>'
-          var catatan = $('#catatan').val()
-          var soap_s = $('#soap_s').val()
-          var soap_o = $('#soap_o').val()
-          var soap_a = $('#soap_a').val()
-          var soap_p = $('#soap_p').val()
+          var nama_obat = $('#nama_obat').val()
+          var tanggal_medikasi = $('#tanggal_medikasi').val()
+          var jam_medikasi = $('#jam_medikasi').val()
           var status = '1';
 
-          if (id_pasien == '' || id_rawatan == '' || catatan == '') {
+          if (id_pasien == '' || id_rawatan == '' || nama_obat == '' || tanggal_medikasi == '' || jam_medikasi == '') {
             console.log('data belum lengkap');
             Swal.fire({
               icon: 'error',
@@ -206,18 +196,16 @@
             });
           } else {
             $.ajax({
-              url: '<?php echo base_url(); ?>pasien/simpancatatanperkembangan',
+              url: '<?php echo base_url(); ?>pasien/simpanmedikasi',
               method: 'POST',
               dataType: 'JSON',
               data: {
                 id_pasien: id_pasien,
                 id_rawatan: id_rawatan,
                 petugas: petugas,
-                catatan: catatan,
-                soap_s: soap_s,
-                soap_o: soap_o,
-                soap_a: soap_a,
-                soap_p: soap_p,
+                nama_obat: nama_obat,
+                tanggal_medikasi: tanggal_medikasi,
+                jam_medikasi: jam_medikasi,
               },
               success: function(data) {
                 console.log(data);
@@ -228,7 +216,7 @@
                   timer: 1500
                 })
                 dataTable.ajax.reload();
-                $('#catatan').val('')
+                $('#nama_obat').val('')
               }
             });
           }
@@ -251,7 +239,7 @@
           }).then((result) => {
             if (result.isConfirmed) {
               $.ajax({
-                url: '<?php echo base_url(); ?>pasien/hapuscatatanperkembangan',
+                url: '<?php echo base_url(); ?>pasien/hapusmedikasi',
                 method: 'POST',
                 data: {
                   id: id,

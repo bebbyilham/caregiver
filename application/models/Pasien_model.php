@@ -60,6 +60,10 @@
             rawatan.barthel_index_score AS barthel_index_score,
             rawatan.barthel_index_score_date AS barthel_index_score_date,
             rawatan.alergi AS alergi,
+            rawatan.tgl_awal_rawatan AS tgl_awal_rawatan,
+            rawatan.tgl_akhir_rawatan AS tgl_akhir_rawatan,
+            rawatan.created_at AS created_at,
+            rawatan.updated_at AS updated_at,
             pasien.nama AS nama,
             pasien.nik AS nik,
             pasien.tanggal_lahir AS tanggal_lahir,
@@ -325,6 +329,10 @@
             catatan_perkembangan.id_rawatan AS id_rawatan,
             catatan_perkembangan.no_transaksi AS no_transaksi,
             catatan_perkembangan.id_petugas AS id_petugas,
+            catatan_perkembangan.soap_s AS soap_s,
+            catatan_perkembangan.soap_o AS soap_o,
+            catatan_perkembangan.soap_a AS soap_a,
+            catatan_perkembangan.soap_p AS soap_p,
             pegawai.nama_pegawai AS nama_pegawai,
             pegawai.gelar_depan AS gelar_depan,
             pegawai.gelar_belakang AS gelar_belakang,
@@ -438,6 +446,196 @@
         }
         //end integritas_kulit
 
+        //tabel medikasi
+        var $order_column_medikasi = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_medikasi()
+        {
+            // $id_medikasi = $_POST['idpasien'];
+            $this->db->select('
+            medikasi.id AS id,
+            medikasi.id_pasien AS id_pasien,
+            medikasi.id_rawatan AS id_rawatan,
+            medikasi.no_transaksi AS no_transaksi,
+            medikasi.id_petugas AS id_petugas,
+            medikasi.nama_obat AS nama_obat,
+            medikasi.tanggal_medikasi AS tanggal_medikasi,
+            medikasi.jam_medikasi AS jam_medikasi,
+            medikasi.created_at AS created_at,
+            medikasi.updated_at AS updated_at
+            ');
+            $this->db->where('id_rawatan', $_POST['id_rawatan']);
+            $this->db->where('status !=', 99);
+            $this->db->from('medikasi');
+            // $this->db->join('pegawai', 'pegawai.id_pegawai = medikasi.id_petugas', 'LEFT');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('created_at', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('medikasi.created_at', 'DESC');
+            }
+        }
+
+
+        public function make_datatables_medikasi()
+        {
+            $this->make_query_medikasi();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_medikasi()
+        {
+            $this->make_query_medikasi();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_medikasi()
+        {
+            $this->db->select("*");
+            $this->db->from('medikasi');
+            return $this->db->count_all_results();
+        }
+        //end medikasi
+        //tabel keadaan
+        var $order_column_keadaan = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_keadaan()
+        {
+            // $id_keadaan = $_POST['idpasien'];
+            $this->db->select('
+            keadaan.id AS id,
+            keadaan.id_pasien AS id_pasien,
+            keadaan.id_rawatan AS id_rawatan,
+            keadaan.no_transaksi AS no_transaksi,
+            keadaan.keadaan_pasien_e AS keadaan_pasien_e,
+            keadaan.keadaan_pasien_v AS keadaan_pasien_v,
+            keadaan.keadaan_pasien_m AS keadaan_pasien_m,
+            keadaan.text_keadaan_pasien_e AS text_keadaan_pasien_e,
+            keadaan.text_keadaan_pasien_v AS text_keadaan_pasien_v,
+            keadaan.text_keadaan_pasien_m AS text_keadaan_pasien_m,
+            keadaan.keadaan_pasien_gjs AS keadaan_pasien_gjs,
+            keadaan.kesadaran AS kesadaran,
+            keadaan.text_kesadaran AS text_kesadaran,
+            keadaan.created_at AS created_at,
+            keadaan.updated_at AS updated_at
+            ');
+            $this->db->where('id_rawatan', $_POST['id_rawatan']);
+            $this->db->where('status !=', 99);
+            $this->db->from('keadaan');
+            // $this->db->join('pegawai', 'pegawai.id_pegawai = keadaan.id_petugas', 'LEFT');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('created_at', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('keadaan.created_at', 'DESC');
+            }
+        }
+
+
+        public function make_datatables_keadaan()
+        {
+            $this->make_query_keadaan();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_keadaan()
+        {
+            $this->make_query_keadaan();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_keadaan()
+        {
+            $this->db->select("*");
+            $this->db->from('keadaan');
+            return $this->db->count_all_results();
+        }
+        //end keadaan
+
+        //tabel hasil_lab
+        var $order_column_hasil_lab = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_hasil_lab()
+        {
+            // $id_hasil_lab = $_POST['idpasien'];
+            $this->db->select('
+            hasil_lab.id AS id,
+            hasil_lab.id_pasien AS id_pasien,
+            hasil_lab.id_rawatan AS id_rawatan,
+            hasil_lab.no_transaksi AS no_transaksi,
+            hasil_lab.id_petugas AS id_petugas,
+            hasil_lab.keterangan AS keterangan,
+            hasil_lab.image AS image,
+            hasil_lab.file_name AS file_name,
+            hasil_lab.created_at AS created_at,
+            hasil_lab.updated_at AS updated_at
+            ');
+            $this->db->where('id_rawatan', $_POST['id_rawatan']);
+            $this->db->where('status !=', 99);
+            $this->db->from('hasil_lab');
+            // $this->db->join('pegawai', 'pegawai.id_pegawai = hasil_lab.id_petugas', 'LEFT');
+            if (($_POST["search"]["value"])) {
+                $this->db->like('created_at', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('hasil_lab.created_at', 'DESC');
+            }
+        }
+
+
+        public function make_datatables_hasil_lab()
+        {
+            $this->make_query_hasil_lab();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_hasil_lab()
+        {
+            $this->make_query_hasil_lab();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_hasil_lab()
+        {
+            $this->db->select("*");
+            $this->db->from('hasil_lab');
+            return $this->db->count_all_results();
+        }
+        //end hasil_lab
+
         public function update_aktivitas($data, $id)
         {
             $this->db->where('id', $id);
@@ -472,6 +670,21 @@
         {
             $this->db->where('id', $id);
             $this->db->update('integritas_kulit', $data);
+        }
+        public function update_medikasi($data, $id)
+        {
+            $this->db->where('id', $id);
+            $this->db->update('medikasi', $data);
+        }
+        public function update_keadaan($data, $id)
+        {
+            $this->db->where('id', $id);
+            $this->db->update('keadaan', $data);
+        }
+        public function update_hasil_lab($data, $id)
+        {
+            $this->db->where('id', $id);
+            $this->db->update('hasil_lab', $data);
         }
 
         //image blog
@@ -554,6 +767,18 @@
         public function simpan_integritas_kulit($data)
         {
             $this->db->insert('integritas_kulit', $data);
+        }
+        public function simpan_medikasi($data)
+        {
+            $this->db->insert('medikasi', $data);
+        }
+        public function simpan_keadaan($data)
+        {
+            $this->db->insert('keadaan', $data);
+        }
+        public function simpan_hasil_lab($data)
+        {
+            $this->db->insert('hasil_lab', $data);
         }
 
 

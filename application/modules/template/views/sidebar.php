@@ -18,8 +18,8 @@ $menu = $this->db->query($queryMenu)->result_array();
         <div class="sidenav-header d-flex align-items-center">
             <a class="navbar-brand mt-2" href="<?= base_url('auth'); ?>">
                 <div class="row ml-4">
-                    <img src="<?= base_url(); ?>assets/img/logo.png" class="navbar-brand-img" alt="...">
-                    <h3 class="text-primary">CAREGIVER</strong></h3>
+                    <!-- <img src="<?= base_url(); ?>assets/img/logo.png" class="navbar-brand-img" alt="..."> -->
+                    <h3 class="text-primary">HEBRINGS</strong></h3>
                 </div>
             </a>
             <div class="ml-auto">

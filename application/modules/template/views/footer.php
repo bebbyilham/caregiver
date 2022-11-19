@@ -99,6 +99,17 @@
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
 
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('HH:MM', {
+        'placeholder': 'hh:mm'
+    })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', {
+        'placeholder': 'mm/dd/yyyy'
+    })
+    //Money Euro
+    $('[data-mask]').inputmask()
+
 
     $('.form-check-input').on('click', function() {
         const menuId = $(this).data('menu');

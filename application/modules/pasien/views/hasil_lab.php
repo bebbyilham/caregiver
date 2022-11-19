@@ -38,64 +38,46 @@
     <div class="row">
       <div class="col">
         <div class="card shadow-sm">
-          <div class="card-header">
-            <div class="row align-items-center">
-              <div class="col-8">
-                <h3 class="mb-0"><?= $pasien['nama'] ?></h3><span><?= '(' . $jk . ' - ' . $y . ' Tahun ' . $m . ' Bulan ' . $d . ' Hari)' ?></span>
-              </div>
-              <div class="col-4 text-right">
-                <button type="button" id="simpan_catatan_perkembangan" class="btn btn-sm btn-primary">Simpan</button>
+          <form method="post" id="form_hasil_lab">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0"><?= $pasien['nama'] ?></h3><span><?= '(' . $jk . ' - ' . $y . ' Tahun ' . $m . ' Bulan ' . $d . ' Hari)' ?></span>
+                </div>
+                <div class="col-4 text-right">
+                  <button type="submit" id="simpan_integritas_kulit" class="btn btn-sm btn-primary">Simpan</button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="card-body">
-            <form>
-              <h6 class="heading-small text-muted mb-4">Data Catatan Perkembangan Pasien</h6>
+            <div class="card-body">
+              <h6 class="heading-small text-muted mb-4">Data Hasil Lab Penunjang Pasien</h6>
               <div class="pl-4">
                 <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="upload_hasil_lab">Upload Hasil Lab</label>
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="upload_hasil_lab" name="upload_hasil_lab" lang="en">
+                        <label class="custom-file-label" for="upload_hasil_lab">format pdf, jpeg, png</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <input type="hidden" name="id_pasien" id="id_pasien" value="<?= $pasien['id'] ?>">
+                  <input type="hidden" name="id_rawatan" id="id_rawatan" value="<?= $rawatan['id'] ?>">
+                  <input type="hidden" name="id_petugas" id="id_petugas" value="<?= $user['pegawai_id'] ?>">
                   <div class="col-12">
                     <div class="form-group">
-                      <label class="form-control-label" for="catatan">Catatan</label>
-                      <textarea class="form-control" id="catatan" rows="3"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="form-group">
-                      <label class="form-control-label" for="soap_s">S</label>
-                      <textarea class="form-control" id="soap_s" rows="1"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="form-group">
-                      <label class="form-control-label" for="soap_o">O</label>
-                      <textarea class="form-control" id="soap_o" rows="1"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="form-group">
-                      <label class="form-control-label" for="soap_a">A</label>
-                      <textarea class="form-control" id="soap_a" rows="1"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="form-group">
-                      <label class="form-control-label" for="soap_p">P</label>
-                      <textarea class="form-control" id="soap_p" rows="1"></textarea>
+                      <label class="form-control-label" for="keterangan">Keterangan</label>
+                      <textarea class="form-control" name="keterangan" id="keterangan" rows="3"></textarea>
                     </div>
                   </div>
                 </div>
               </div>
               <!-- <hr class="my-4" /> -->
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -103,17 +85,17 @@
       <div class="col">
         <div class="card shadow-sm">
           <div class="card-header">
-            <h3 class="card-title">Data Catatan Perkembangan Pasien</h3>
+            <h3 class="card-title">Data Hasil Lab Penunjang Pasien</h3>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table id="tabel_catataan_perkembangan" class="table table-hover table-sm display">
+              <table id="tabel_integritas_kulit" class="table table-hover table-sm display">
                 <thead>
                   <tr>
                     <th>#</th>
                     <th>No.</th>
-                    <th>Petugas</th>
-                    <th>Catatan</th>
+                    <th>Waktu</th>
+                    <th>Keterangan</th>
                   </tr>
                 </thead>
               </table>
@@ -123,7 +105,7 @@
       </div>
     </div>
     <!-- Modal Create User -->
-    <div class="modal fade" id="modal_tambah_blog" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="modal_foto_kulit" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -131,6 +113,14 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
+          </div>
+          <div class="modal-body">
+            <img class="card-img-top" id="src_foto_kulit" src="" alt="Image placeholder">
+          </div>
+          <div class="modal-footer">
+            <div class="text-right">
+
+            </div>
           </div>
 
         </div>
@@ -159,13 +149,13 @@
 
 
         // DataTable
-        var dataTable = $('#tabel_catataan_perkembangan').DataTable({
+        var dataTable = $('#tabel_integritas_kulit').DataTable({
           "serverSide": true,
           "responsive": true,
           "pageLength": 25,
           "order": [],
           "ajax": {
-            "url": "<?php echo base_url(); ?>pasien/tabelcatatanperkembangan",
+            "url": "<?php echo base_url(); ?>pasien/tabelhasillab",
             "type": "POST",
             "data": function(data) {
               data.id_rawatan = '<?= $rawatan['id'] ?>'
@@ -185,59 +175,46 @@
           },
         });
 
-        // Edit Pegawai
-        $('#simpan_catatan_perkembangan').on('click', function() {
-          var id_pasien = '<?= $pasien['id'] ?>'
-          var id_rawatan = '<?= $rawatan['id'] ?>'
-          var petugas = '<?= $user['pegawai_id'] ?>'
-          var catatan = $('#catatan').val()
-          var soap_s = $('#soap_s').val()
-          var soap_o = $('#soap_o').val()
-          var soap_a = $('#soap_a').val()
-          var soap_p = $('#soap_p').val()
-          var status = '1';
 
-          if (id_pasien == '' || id_rawatan == '' || catatan == '') {
-            console.log('data belum lengkap');
-            Swal.fire({
-              icon: 'error',
-              title: 'Data belum lengkap!',
-              text: 'Mohon lengkapi data terlebih dahulu',
-            });
-          } else {
-            $.ajax({
-              url: '<?php echo base_url(); ?>pasien/simpancatatanperkembangan',
-              method: 'POST',
-              dataType: 'JSON',
-              data: {
-                id_pasien: id_pasien,
-                id_rawatan: id_rawatan,
-                petugas: petugas,
-                catatan: catatan,
-                soap_s: soap_s,
-                soap_o: soap_o,
-                soap_a: soap_a,
-                soap_p: soap_p,
-              },
-              success: function(data) {
-                console.log(data);
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Data berhasil disimpan',
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-                dataTable.ajax.reload();
-                $('#catatan').val('')
-              }
-            });
-          }
+        $(document).on('submit', '#form_hasil_lab', function(event) {
 
+          var keterangan = $('#keterangan').val()
+          var upload_hasil_lab = $('#upload_hasil_lab').val()
+          // var status = '1';
+
+          $.ajax({
+            url: '<?php echo base_url(); ?>pasien/simpanhasillab',
+            method: 'POST',
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            success: function(data) {
+              console.log(data);
+              Swal.fire({
+                icon: 'success',
+                title: 'Data berhasil ditambahkan',
+                showConfirmButton: false,
+                timer: 2000
+              })
+              dataTable.ajax.reload();
+              $('#keterangan').val('')
+              $('#upload_hasil_lab').val('')
+            }
+          });
+
+        });
+
+        $(document).on('click', '.foto_kulit', function() {
+          $('#modal_foto_kulit').modal('show');
+          $('.modal-title').text('Foto Kulit');
+          var fk = $(this).attr('fotokulit');
+          $("#src_foto_kulit").attr("src", fk)
         });
 
         $(document).on('click', '.delete', function() {
           var id = $(this).attr('id');
           var notransaksi = $(this).attr('notransaksi');
+          var file = $(this).attr('file');
           var status = 99;
           Swal.fire({
             title: 'Apakah Kamu Yakin?',
@@ -251,7 +228,7 @@
           }).then((result) => {
             if (result.isConfirmed) {
               $.ajax({
-                url: '<?php echo base_url(); ?>pasien/hapuscatatanperkembangan',
+                url: '<?php echo base_url(); ?>pasien/hapushasillab',
                 method: 'POST',
                 data: {
                   id: id,

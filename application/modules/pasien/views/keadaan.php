@@ -44,54 +44,76 @@
                 <h3 class="mb-0"><?= $pasien['nama'] ?></h3><span><?= '(' . $jk . ' - ' . $y . ' Tahun ' . $m . ' Bulan ' . $d . ' Hari)' ?></span>
               </div>
               <div class="col-4 text-right">
-                <button type="button" id="simpan_catatan_perkembangan" class="btn btn-sm btn-primary">Simpan</button>
+                <button type="button" id="simpan_keadaan" class="btn btn-sm btn-primary">Simpan</button>
               </div>
             </div>
           </div>
           <div class="card-body">
             <form>
-              <h6 class="heading-small text-muted mb-4">Data Catatan Perkembangan Pasien</h6>
+              <h6 class="heading-small text-muted mb-4">Data Keadaaan Pasien</h6>
               <div class="pl-4">
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-lg-6 col-12">
                     <div class="form-group">
-                      <label class="form-control-label" for="catatan">Catatan</label>
-                      <textarea class="form-control" id="catatan" rows="3"></textarea>
+                      <label class="form-control-label" for="keadaan_pasien_e">E</label>
+                      <select class="custom-select" id="keadaan_pasien_e" name="keadaan_pasien_e">
+                        <option value="4">Pasien membuka mata spontan</option>
+                        <option value="3">Jika pasien tidak bangun, berikan perintah kepada pasien seperti :buka mata anda</option>
+                        <option value="2">Jika tidak berespon terhadap rangsangan verbal, kaji respon dengan rangsang </option>
+                        <option value="1">Tidak ada respon </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-12">
+                    <div class="form-group">
+                      <label class="form-control-label" for="keadaan_pasien_v">V</label>
+                      <select class="custom-select" id="keadaan_pasien_v" name="keadaan_pasien_v">
+                        <option value="5">Pasien menjawab pertanyaan dengan benar</option>
+                        <option value="4">Pasien bingung, tidak menjawab dengan benar</option>
+                        <option value="3">Pasien merespon dengan kata-kata tunggal</option>
+                        <option value="2">Pasien merespon dengan suara mengerang saja </option>
+                        <option value="1">Tidak ada respon </option>
+                      </select>
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-12">
+                  <div class="col-lg-6 col-12">
                     <div class="form-group">
-                      <label class="form-control-label" for="soap_s">S</label>
-                      <textarea class="form-control" id="soap_s" rows="1"></textarea>
+                      <label class="form-control-label" for="keadaan_pasien_m">M</label>
+                      <select class="custom-select" id="keadaan_pasien_m" name="keadaan_pasien_m">
+                        <option value="6">Pasien mengikuti perintah dengan benar</option>
+                        <option value="5">Pasien mampu melokalisasi nyeri</option>
+                        <option value="4">Pasien gagal melokalisasi nyeri</option>
+                        <option value="3">Respon pasien fleksi abnormal</option>
+                        <option value="2">Respon pasien ekstensi abnormal </option>
+                        <option value="1">Tidak ada respon </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-12">
+                    <div class="form-group">
+                      <label class="form-control-label" for="keadaan_pasien_gjs">GJS</label>
+                      <input type="number" class="form-control" id="keadaan_pasien_gjs" name="keadaan_pasien_gjs" placeholder="Rentang 3 s.d 15" autocomplete="off">
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-12">
+                  <div class="col-lg-6 col-12">
                     <div class="form-group">
-                      <label class="form-control-label" for="soap_o">O</label>
-                      <textarea class="form-control" id="soap_o" rows="1"></textarea>
+                      <label class="form-control-label" for="kesadaran">Kesadaran</label>
+                      <select class="custom-select" id="kesadaran" name="kesadaran">
+                        <option value="1">COMPOS MENTIS</option>
+                        <option value="2">APATIS</option>
+                        <option value="3">SOMNOLENT</option>
+                        <option value="4">STUPOR</option>
+                        <option value="5">COMA</option>
+                      </select>
                     </div>
                   </div>
+
                 </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="form-group">
-                      <label class="form-control-label" for="soap_a">A</label>
-                      <textarea class="form-control" id="soap_a" rows="1"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="form-group">
-                      <label class="form-control-label" for="soap_p">P</label>
-                      <textarea class="form-control" id="soap_p" rows="1"></textarea>
-                    </div>
-                  </div>
-                </div>
+
               </div>
               <!-- <hr class="my-4" /> -->
             </form>
@@ -103,17 +125,17 @@
       <div class="col">
         <div class="card shadow-sm">
           <div class="card-header">
-            <h3 class="card-title">Data Catatan Perkembangan Pasien</h3>
+            <h3 class="card-title">Data Keadaan Pasien</h3>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table id="tabel_catataan_perkembangan" class="table table-hover table-sm display">
+              <table id="tabel_aktivitas" class="table table-hover table-sm display">
                 <thead>
                   <tr>
                     <th>#</th>
                     <th>No.</th>
-                    <th>Petugas</th>
-                    <th>Catatan</th>
+                    <th>Waktu</th>
+                    <th>Total Skor</th>
                   </tr>
                 </thead>
               </table>
@@ -122,23 +144,9 @@
         </div>
       </div>
     </div>
-    <!-- Modal Create User -->
-    <div class="modal fade" id="modal_tambah_blog" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title text-primary"></h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </div>
     <script>
       $(document).ready(function() {
-        $('#tanggal_pemasangan').datetimepicker({
+        $('#tanggal_lahir').datetimepicker({
           timepicker: false,
           datepicker: true,
           scrollInput: false,
@@ -159,13 +167,13 @@
 
 
         // DataTable
-        var dataTable = $('#tabel_catataan_perkembangan').DataTable({
+        var dataTable = $('#tabel_aktivitas').DataTable({
           "serverSide": true,
           "responsive": true,
           "pageLength": 25,
           "order": [],
           "ajax": {
-            "url": "<?php echo base_url(); ?>pasien/tabelcatatanperkembangan",
+            "url": "<?php echo base_url(); ?>pasien/tabelkeadaan",
             "type": "POST",
             "data": function(data) {
               data.id_rawatan = '<?= $rawatan['id'] ?>'
@@ -173,7 +181,7 @@
           },
           columnDefs: [{
             orderable: false,
-            targets: [0, 1, 2]
+            targets: [0, 1, 2, 3]
           }],
           autoWidth: !1,
           language: {
@@ -186,18 +194,21 @@
         });
 
         // Edit Pegawai
-        $('#simpan_catatan_perkembangan').on('click', function() {
+        $('#simpan_keadaan').on('click', function() {
           var id_pasien = '<?= $pasien['id'] ?>'
           var id_rawatan = '<?= $rawatan['id'] ?>'
-          var petugas = '<?= $user['pegawai_id'] ?>'
-          var catatan = $('#catatan').val()
-          var soap_s = $('#soap_s').val()
-          var soap_o = $('#soap_o').val()
-          var soap_a = $('#soap_a').val()
-          var soap_p = $('#soap_p').val()
+          var keadaan_pasien_e = $('#keadaan_pasien_e').val()
+          var keadaan_pasien_v = $('#keadaan_pasien_v').val()
+          var keadaan_pasien_m = $('#keadaan_pasien_m').val()
+          var text_keadaan_pasien_e = $('#keadaan_pasien_e option:selected').text()
+          var text_keadaan_pasien_v = $('#keadaan_pasien_v option:selected').text()
+          var text_keadaan_pasien_m = $('#keadaan_pasien_m option:selected').text()
+          var keadaan_pasien_gjs = $('#keadaan_pasien_gjs').val()
+          var kesadaran = $('#kesadaran').val()
+          var text_kesadaran = $('#kesadaran option:selected').text()
           var status = '1';
 
-          if (id_pasien == '' || id_rawatan == '' || catatan == '') {
+          if (id_pasien == '' || id_rawatan == '' || keadaan_pasien_e == '' || keadaan_pasien_v == '' || keadaan_pasien_m == '' || keadaan_pasien_gjs == '' || kesadaran == '') {
             console.log('data belum lengkap');
             Swal.fire({
               icon: 'error',
@@ -206,18 +217,21 @@
             });
           } else {
             $.ajax({
-              url: '<?php echo base_url(); ?>pasien/simpancatatanperkembangan',
+              url: '<?php echo base_url(); ?>pasien/simpankeadaan',
               method: 'POST',
               dataType: 'JSON',
               data: {
                 id_pasien: id_pasien,
                 id_rawatan: id_rawatan,
-                petugas: petugas,
-                catatan: catatan,
-                soap_s: soap_s,
-                soap_o: soap_o,
-                soap_a: soap_a,
-                soap_p: soap_p,
+                keadaan_pasien_e: keadaan_pasien_e,
+                keadaan_pasien_v: keadaan_pasien_v,
+                keadaan_pasien_m: keadaan_pasien_m,
+                text_keadaan_pasien_e: text_keadaan_pasien_e,
+                text_keadaan_pasien_v: text_keadaan_pasien_v,
+                text_keadaan_pasien_m: text_keadaan_pasien_m,
+                keadaan_pasien_gjs: keadaan_pasien_gjs,
+                kesadaran: kesadaran,
+                text_kesadaran: text_kesadaran,
               },
               success: function(data) {
                 console.log(data);
@@ -228,7 +242,7 @@
                   timer: 1500
                 })
                 dataTable.ajax.reload();
-                $('#catatan').val('')
+                // window.location.href = "<?php base_url(); ?>pasien/pasienterdaftar";
               }
             });
           }
@@ -251,7 +265,7 @@
           }).then((result) => {
             if (result.isConfirmed) {
               $.ajax({
-                url: '<?php echo base_url(); ?>pasien/hapuscatatanperkembangan',
+                url: '<?php echo base_url(); ?>pasien/hapuskeadaan',
                 method: 'POST',
                 data: {
                   id: id,

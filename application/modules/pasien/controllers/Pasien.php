@@ -206,13 +206,13 @@ class Pasien extends MX_Controller
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                               <span class="small p-3 font-weight-bold text-dark">' . $row->nama . '</span>
                                 <a class="dropdown-item aktivitas" href="' . base_url('pasien/aktivitas/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '" >Aktivitas</a>
-                                <a class="dropdown-item keadaan_pasien" href="#" id="' . $row->id . '" namapasien="' . $row->nama . '" >Keadaan Pasien</a>
+                                <a class="dropdown-item keadaan_pasien" href="' . base_url('pasien/keadaan/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" id="' . $row->id . '" namapasien="' . $row->nama . '" >Keadaan Pasien</a>
                                 <a class="dropdown-item tanda_vital" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Tanda Vital</a>
                                 <a class="dropdown-item catatan_perkembangan" href="' . base_url('pasien/catatanperkembangan/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Catatan Perkembangan</a>
-                                <a class="dropdown-item medikasi" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Medikasi</a>
+                                <a class="dropdown-item medikasi" href="' . base_url('pasien/medikasi/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Medikasi</a>
                                 <a class="dropdown-item pemantauan_alat_medik" href="' . base_url('pasien/pemantauanalatmedik/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Pemantauan Alat Medik</a>
                                 <a class="dropdown-item integritas_kulit" href="' . base_url('pasien/integritaskulit/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Integritas Kulit</a>
-                                <a class="dropdown-item hasil_lab_penunjang" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
+                                <a class="dropdown-item hasil_lab_penunjang" href="' . base_url('pasien/hasillab/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
                             </div>
             </div>
             </div>
@@ -223,7 +223,7 @@ class Pasien extends MX_Controller
             } else {
                 $jk = 'Perempuan';
             }
-            $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari";
+            $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari <br>" . $row->created_at;
             $sub_array[] = $row->diagnosa_sakit;
 
             $sub_array[] = "<b>" . $row->barthel_index_score . "</b><br>" . $row->barthel_index_score_date;
@@ -580,6 +580,10 @@ class Pasien extends MX_Controller
             'id_rawatan'             => $_POST['id_rawatan'],
             'no_transaksi'          => $notransaksi,
             'catatan'                    => $_POST['catatan'],
+            'soap_s'                    => $_POST['soap_s'],
+            'soap_o'                    => $_POST['soap_o'],
+            'soap_a'                    => $_POST['soap_a'],
+            'soap_p'                    => $_POST['soap_p'],
             'id_petugas'                    => $_POST['petugas'],
             'status'                => 1,
         );
@@ -624,12 +628,18 @@ class Pasien extends MX_Controller
             $no++;
             $sub_array = array();
             $sub_array[] = '
-            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" file="' . $row->file_name . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
             $sub_array[] = $no;
             $sub_array[] = '<span class="badge badge-primary">' . $row->gelar_depan . ' ' . $row->nama_pegawai . ' ' . $row->gelar_belakang . '</span><br>
             <span class="badge badge-warning">' . $row->created_at . '</span>';
-            $sub_array[] = $row->catatan;
-
+            $sub_array[] =
+                '<div><span>' . $row->catatan . ' </span><br>
+            <span class="font-weight-bold">S</span><span> : ' . $row->soap_s . '</span><br>
+            <span class="font-weight-bold">O</span><span> : ' . $row->soap_o . '</span><br>
+            <span class="font-weight-bold">A</span><span> : ' . $row->soap_a . '</span><br>
+            <span class="font-weight-bold">P</span><span> : ' . $row->soap_p . '</span>
+            </div>
+            ';
             $data[] = $sub_array;
         }
 
@@ -744,6 +754,315 @@ class Pasien extends MX_Controller
             "draw"                => intval($_POST['draw']),
             "recordsTotal"        => $this->Pasien_model->get_all_data_integritas_kulit(),
             "recordsFiltered"     => $this->Pasien_model->get_filtered_data_integritas_kulit(),
+            "data"                => $data
+        );
+        echo json_encode($output);
+    }
+
+    public function medikasi($id, $idpasien)
+    {
+        $data['title'] = 'Medikasi Pasien';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
+        $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/medikasi';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+
+    public function simpanmedikasi()
+    {
+        $notransaksi = 'MP' . date("ymdhis");
+        $data_medikasi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'id_rawatan'             => $_POST['id_rawatan'],
+            'no_transaksi'          => $notransaksi,
+            'nama_obat'                    => $_POST['nama_obat'],
+            'tanggal_medikasi'                    => $_POST['tanggal_medikasi'],
+            'jam_medikasi'                    => $_POST['jam_medikasi'],
+            'id_petugas'                    => $_POST['petugas'],
+            'status'                => 1,
+        );
+        $data_transaksi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'status'                => 1,
+        );
+
+        $this->Pasien_model->simpan_medikasi($data_medikasi);
+        $this->Pasien_model->simpan_transaksi($data_transaksi);
+        echo json_encode([
+            'medikasi' => $data_medikasi,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function hapusmedikasi()
+    {
+
+        $data_medikasi = array(
+            'status'                => $_POST['status'],
+        );
+        $data_transaksi = array(
+            'status'                => $_POST['status'],
+        );
+
+        $this->Pasien_model->update_medikasi($data_medikasi, $_POST['id']);
+        $this->Pasien_model->update_transaksi($data_transaksi, $_POST['notransaksi']);
+        echo json_encode([
+            'medikasi' => $data_medikasi,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function tabelmedikasi()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_medikasi();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $sub_array[] = '
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
+            $sub_array[] = $no;
+            $sub_array[] =
+                '<div>
+            <span>' . $row->tanggal_medikasi . '</span><br>
+            <span>' . $row->jam_medikasi . '</span><br>
+            </div>
+            ';
+            $sub_array[] =
+                '<div>
+            <span class="font-weight-bold">' . $row->nama_obat . '</span>
+            </div>
+            ';
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_medikasi(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_medikasi(),
+            "data"                => $data
+        );
+        echo json_encode($output);
+    }
+
+    public function keadaan($id, $idpasien)
+    {
+        $data['title'] = 'Keadaan Pasien';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
+        $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/keadaan';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+
+    public function simpankeadaan()
+    {
+        $notransaksi = 'KP' . date("ymdhis");
+        $data_keadaan = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'id_rawatan'             => $_POST['id_rawatan'],
+            'no_transaksi'          => $notransaksi,
+            'keadaan_pasien_e'                    => $_POST['keadaan_pasien_e'],
+            'keadaan_pasien_v'                 => $_POST['keadaan_pasien_v'],
+            'keadaan_pasien_m'        => $_POST['keadaan_pasien_m'],
+            'text_keadaan_pasien_e'                    => $_POST['text_keadaan_pasien_e'],
+            'text_keadaan_pasien_v'                 => $_POST['text_keadaan_pasien_v'],
+            'text_keadaan_pasien_m'        => $_POST['text_keadaan_pasien_m'],
+            'keadaan_pasien_gjs'                => $_POST['keadaan_pasien_gjs'],
+            'kesadaran'              => $_POST['kesadaran'],
+            'text_kesadaran'              => $_POST['text_kesadaran'],
+            'status'                => 1,
+        );
+        $data_transaksi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'status'                => 1,
+        );
+
+        $this->Pasien_model->simpan_keadaan($data_keadaan);
+        $this->Pasien_model->simpan_transaksi($data_transaksi);
+        echo json_encode([
+            'keadaan' => $data_keadaan,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function hapuskeadaan()
+    {
+
+        $data_keadaan = array(
+            'status'                => $_POST['status'],
+        );
+        $data_transaksi = array(
+            'status'                => $_POST['status'],
+        );
+
+        $this->Pasien_model->update_keadaan($data_keadaan, $_POST['id']);
+        $this->Pasien_model->update_transaksi($data_transaksi, $_POST['notransaksi']);
+        echo json_encode([
+            'keadaan' => $data_keadaan,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function tabelkeadaan()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_keadaan();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $sub_array[] = '
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a>';
+            $sub_array[] = $no;
+            $sub_array[] = $row->created_at;
+            $sub_array[] =
+                '<div>
+            <span>' . $row->keadaan_pasien_e . ' - ' . $row->text_keadaan_pasien_e . '</span><br>
+            <span>' . $row->keadaan_pasien_v . ' - ' . $row->text_keadaan_pasien_v . '</span><br>
+            <span>' . $row->keadaan_pasien_m . ' - ' . $row->text_keadaan_pasien_m . '</span><br>
+            <span class="font-weight-bold"> GJS : </span><span>' . $row->keadaan_pasien_gjs . '</span><br>
+            <span class="font-weight-bold"> Kesadaran : </span><span>' . $row->text_kesadaran . '</span><br>
+            </div>
+            ';
+
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_keadaan(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_keadaan(),
+            "data"                => $data
+        );
+        echo json_encode($output);
+    }
+
+    public function hasillab($id, $idpasien)
+    {
+        $data['title'] = 'Hasil Lab Penunjang Pasien';
+        $data['user'] = $this->db->get_where('user', ['username' =>
+        $this->session->userdata('username')])->row_array();
+        $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
+        $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+
+        $data['content'] = '';
+        $page = 'pasien/hasil_lab';
+        // echo modules::run('template/loadview', $data);
+        echo modules::run('template/loadview', $data, $page);
+    }
+
+
+    public function simpanhasillab()
+    {
+        $config['upload_path']          = './assets/img/hasillab/';
+        $config['allowed_types']        = 'jpeg|jpg|png|pdf';
+        $config['max_size']             = '10024'; // 6024KB
+        $config['encrypt_name']            = TRUE;
+
+        $this->load->library('upload', $config);
+
+        $this->upload->do_upload('upload_hasil_lab');
+        $filename = $this->upload->data("file_name");
+        // $data = array(
+
+        //     'image'                 => base_url('assets/img/image_blog/') . $filename,
+        //     'file_name'                 => $filename,
+        //     'blog_id'                 => $this->input->post('id_blog')
+        // );
+        $notransaksi = 'HL' . date("ymdhis");
+        $data_hasil_lab = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'id_rawatan'             => $_POST['id_rawatan'],
+            'id_petugas'             => $_POST['id_petugas'],
+            'no_transaksi'          => $notransaksi,
+            'image'                 => base_url('assets/img/hasillab/') . $filename,
+            'file_name'                 => $filename,
+            'keterangan'             => $_POST['keterangan'],
+            'status'                => 1,
+        );
+        $data_transaksi = array(
+            'id_pasien'             => $_POST['id_pasien'],
+            'no_transaksi'          => $notransaksi,
+            'status'                => 1,
+        );
+
+        // if ($_POST['keterangan'] == '' || $_POST['upload_hasil_lab'] == '') {
+        //     $code = '201';
+        //     $message = 'Data gagal disimpan';
+        // } else {
+        //     $code = '200';
+        //     $message = 'Data berhasil disimpan';
+
+        // }
+        $this->Pasien_model->simpan_hasil_lab($data_hasil_lab);
+        $this->Pasien_model->simpan_transaksi($data_transaksi);
+        return json_encode([
+            'code' => '201',
+            'message' => 'Data berhasil disimpan',
+            'hasil_lab' => $data_hasil_lab,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function hapushasillab()
+    {
+        $file = $_POST['file'];
+        unlink(FCPATH . 'assets/img/hasillab/' . $file);
+
+        $data_hasil_lab = array(
+            'status'                => $_POST['status'],
+        );
+        $data_transaksi = array(
+            'status'                => $_POST['status'],
+        );
+
+        $this->Pasien_model->update_hasil_lab($data_hasil_lab, $_POST['id']);
+        $this->Pasien_model->update_transaksi($data_transaksi, $_POST['notransaksi']);
+        echo json_encode([
+            'hasil_lab' => $data_hasil_lab,
+            'transaksi' => $data_transaksi
+        ]);
+    }
+
+    public function tabelhasillab()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_hasil_lab();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $sub_array[] = '
+            <a href="#" class="fa fa-times-circle ml-2 mr-2 text-danger delete" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" file="' . $row->file_name . '" data-toggle="modal" data-target="#staticBackdrop" title="delete"></a><br>
+            <a href="' . $row->image . '" class="fa fa-camera ml-2 mr-2 text-primary foto_hasillab" id="' . $row->id . '" notransaksi="' . $row->no_transaksi . '" fotohasillab="' . $row->image . '" title="Hasil Lab" target="_blank"></a>';
+            $sub_array[] = $no;
+            // $sub_array[] = '<span class="badge badge-primary">' . $row->gelar_depan . ' ' . $row->nama_pegawai . ' ' . $row->gelar_belakang . '</span><br>
+            // <span class="badge badge-warning">' . $row->created_at . '</span>';
+            $sub_array[] = $row->created_at;
+            $sub_array[] = $row->keterangan;
+
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_hasil_lab(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_hasil_lab(),
             "data"                => $data
         );
         echo json_encode($output);
