@@ -195,7 +195,7 @@
             "processing": true,
             "order": [],
             "ajax": {
-                "url": "<?php echo base_url(); ?>admin/tabelPegawai",
+                "url": "<?php echo base_url(); ?>administrator/tabelPegawai",
                 "type": "POST",
             },
             columnDefs: [{
@@ -207,7 +207,7 @@
 
         // GET Profesi
         $.ajax({
-            url: "<?php echo base_url(); ?>admin/getProfesi",
+            url: "<?php echo base_url(); ?>administrator/getProfesi",
             method: "POST",
             async: false,
             dataType: 'JSON',
@@ -224,7 +224,7 @@
 
         // GET ROLE
         $.ajax({
-            url: "<?php echo base_url(); ?>admin/getRole",
+            url: "<?php echo base_url(); ?>administrator/getRole",
             method: "POST",
             async: false,
             dataType: 'JSON',
@@ -270,7 +270,7 @@
                 toastr["error"]("Data belum lengkap");
             } else {
                 $.ajax({
-                    url: '<?php echo base_url(); ?>admin/tambahPegawai',
+                    url: '<?php echo base_url(); ?>administrator/tambahPegawai',
                     method: 'POST',
                     data: new FormData(this),
                     contentType: false,
@@ -289,7 +289,7 @@
             var id = $(this).attr('id');
 
             $.ajax({
-                url: '<?php echo base_url(); ?>admin/editPegawai',
+                url: '<?php echo base_url(); ?>administrator/editPegawai',
                 method: 'POST',
                 data: {
                     id: id
@@ -319,7 +319,7 @@
             $('#error_password2').text('');
             $('#tambah_user')[0].reset();
             $.ajax({
-                url: '<?php echo base_url(); ?>admin/fetchSingleUser',
+                url: '<?php echo base_url(); ?>administrator/fetchSingleUser',
                 method: 'POST',
                 data: {
                     id: id
@@ -402,7 +402,7 @@
                 toastr["error"]("Konfirmasi Password tidak sama!");
             } else {
                 $.ajax({
-                    url: '<?php echo base_url(); ?>admin/tambahUser',
+                    url: '<?php echo base_url(); ?>administrator/tambahUser',
                     method: 'POST',
                     data: new FormData(this),
                     contentType: false,

@@ -104,6 +104,7 @@
                             <div class="text-center text-muted mb-4">
                                 <h3>Login Caregiver</h3>
                             </div>
+                            <?= $this->session->flashdata('message'); ?>
                             <form role="form" action="<?= base_url('auth'); ?>" method="post">
                                 <div class="form-group mb-3">
                                     <div class="input-group input-group-merge input-group-alternative">

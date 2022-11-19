@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Admin extends MX_Controller
+class Administrator extends MX_Controller
 {
     public function __construct()
     {
@@ -17,7 +17,7 @@ class Admin extends MX_Controller
         $this->session->userdata('username')])->row_array();
 
         $data['content'] = '';
-        $page = 'admin/index';
+        $page = 'administrator/index';
         // echo modules::run('template/loadview', $data);
         echo modules::run('template/loadview', $data, $page);
     }
@@ -35,7 +35,7 @@ class Admin extends MX_Controller
         $data['menu'] = $this->db->order_by('deskripsi', 'ASC')->get('user_menu')->result_array();
 
         $data['content'] = '';
-        $page = 'admin/role_access';
+        $page = 'administrator/role_access';
         echo modules::run('template/loadview', $data, $page);
     }
 
@@ -69,7 +69,7 @@ class Admin extends MX_Controller
         $this->session->userdata('username')])->row_array();
 
         $data['content'] = '';
-        $page = 'admin/role';
+        $page = 'administrator/role';
         echo modules::run('template/loadview', $data, $page);
     }
 
@@ -150,7 +150,7 @@ class Admin extends MX_Controller
         $this->session->userdata('username')])->row_array();
 
         $data['content'] = '';
-        $page = 'admin/menu';
+        $page = 'administrator/menu';
         echo modules::run('template/loadview', $data, $page);
     }
 
@@ -237,7 +237,7 @@ class Admin extends MX_Controller
         $data['menu'] = $this->db->order_by('deskripsi', 'ASC')->get('user_menu')->result_array();
 
         $data['content'] = '';
-        $page = 'admin/submenu';
+        $page = 'administrator/submenu';
         echo modules::run('template/loadview', $data, $page);
     }
 
@@ -335,7 +335,7 @@ class Admin extends MX_Controller
         $this->session->userdata('username')])->row_array();
 
         $data['content'] = '';
-        $page = 'admin/referensi';
+        $page = 'administrator/referensi';
         echo modules::run('template/loadview', $data, $page);
     }
 
@@ -1407,7 +1407,7 @@ class Admin extends MX_Controller
         $this->session->userdata('username')])->row_array();
 
         $data['content'] = '';
-        $page = 'admin/pegawai';
+        $page = 'administrator/pegawai';
         echo modules::run('template/loadview', $data, $page);
     }
 
@@ -1419,7 +1419,10 @@ class Admin extends MX_Controller
 
     public function getRole()
     {
-        $data = $this->db->order_by('role', 'ASC')->get('user_role')->result();
+        $data = $this->db->select('*')
+            ->from('user_role')
+            ->where('id !=', '1')
+            ->get()->result();
         echo json_encode($data);
     }
 
@@ -1580,7 +1583,7 @@ class Admin extends MX_Controller
         $this->session->userdata('username')])->row_array();
 
         $data['content'] = '';
-        $page = 'admin/database';
+        $page = 'administrator/database';
         echo modules::run('template/loadview', $data, $page);
     }
 
