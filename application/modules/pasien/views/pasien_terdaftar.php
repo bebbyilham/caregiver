@@ -52,54 +52,118 @@
               </div>
           </div>
       </div>
-      <!-- Modal Create User -->
-      <div class="modal fade" id="modal_tambah_blog" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal fade" id="riwayatrawatanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h4 class="modal-title text-primary"></h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <form method="post" id="tambah_user">
+              <form method="post" id="form_print">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Tanggal Resume Medis</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
                       <div class="modal-body">
-                          <input type="hidden" name="pegawai_id" id="pegawai_id">
-                          <input type="hidden" id="id_user" name="id_user">
-                          <input type="hidden" name="action_modal" id="action_modal" value="edit">
-                          <input type="hidden" name="nama_akun" id="nama_akun">
-                          <div class="form-group">
-                              <label for="judul">Judul</label>
-                              <input type="text" class="form-control rounded-0" id="judul" name="judul" placeholder="Judul">
-                              <small><span class="text-danger" id="error_judul"></span></small>
-                          </div>
-                          <div class="form-group">
-                              <label for="password">Password</label>
-                              <input type="password" class="form-control rounded-0" id="password" name="password" placeholder="Password">
-                              <small><span class="text-danger" id="error_password"></span></small>
-                          </div>
-                          <div class="form-group">
-                              <label for="password2">Ulangi Password</label>
-                              <input type="password" class="form-control rounded-0" id="password2" name="password2" placeholder="Ulangi Password">
-                              <small><span class="text-danger" id="error_password2"></span></small>
-                          </div>
-                          <div class="form-group">
-                              <label for="role_id">Role</label>
-                              <select class="custom-select rounded-0" id="role_id" name="role_id"></select>
-                              <small><span class="text-danger" id="error_role_id"></span></small>
+                          <div class="table-responsive">
+                              <table id="tabel_rawatan" class="table table-hover table-sm display">
+                                  <thead>
+                                      <tr>
+                                          <th class="text-center" style="width: 10%;">#</th>
+                                          <!-- <th style="width: 5%;">No.</th> -->
+                                          <th style="width: 25%;">Data Pasien</th>
+                                          <th style="width: 20%;">Diagnosa</th>
+                                          <!-- <th style="width: 40%;">Jenis Kelamin</th> -->
+                                          <th style="width: 10%;">BI Score</th>
+                                          <th style="width: 10%;">Alergi</th>
+                                      </tr>
+                                  </thead>
+                              </table>
                           </div>
                       </div>
-                      <div class="modal-footer justify-content-between">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                          <button type="submit" class="btn btn-primary">Submit</button>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                          <input type="hidden" name="idpasien" id="idpasien">
+                          <button type="button" class="btn btn-primary" id="btn_print">Print</button>
                       </div>
-                  </form>
-              </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+      <div class="modal fade" id="detailpasienModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <form method="post" id="form_print">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Tanggal Resume Medis</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <div class="table-responsive">
+                              <table id="tabel_rawatan" class="table table-hover table-sm display">
+                                  <tbody>
+                                      <tr>
+                                          <td>Nama</td>
+                                          <td>:</td>
+                                          <td class="detail_nama">Nama</td>
+                                      </tr>
+                                      <tr>
+                                          <td>NIK</td>
+                                          <td>:</td>
+                                          <td class="detail_nik"></td>
+                                      </tr>
+                                      <tr>
+                                          <td>No. Rekam Medis</td>
+                                          <td>:</td>
+                                          <td class="detail_no_mr"></td>
+                                      </tr>
+                                      <tr>
+                                          <td>Jenis Kelamin</td>
+                                          <td>:</td>
+                                          <td class="detail_jenis_kelamin"></td>
+                                      </tr>
+                                      <tr>
+                                          <td>Tanggal Lahir</td>
+                                          <td>:</td>
+                                          <td class="detail_tanggal_lahir"></td>
+                                      </tr>
+                                      <tr>
+                                          <td>Alamat</td>
+                                          <td>:</td>
+                                          <td class="detail_alamat"></td>
+                                      </tr>
+                                      <tr>
+                                          <td>No. Telp</td>
+                                          <td>:</td>
+                                          <td class="detail_notelp1"></td>
+                                      </tr>
+                                      <tr>
+                                          <td>Nama Keluarga</td>
+                                          <td>:</td>
+                                          <td class="detail_nama_pj"></td>
+                                      </tr>
+                                      <tr>
+                                          <td>No. Telp Keluarga</td>
+                                          <td>:</td>
+                                          <td class="detail_notelp3"></td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                          <input type="hidden" name="idpasien" id="idpasien">
+                          <button type="button" class="btn btn-primary" id="btn_print">Print</button>
+                      </div>
+                  </div>
+              </form>
           </div>
       </div>
       <script>
           $(document).ready(function() {
               $('#loading').hide();
+
               // DataTable
               var dataTable = $('#tabel_pasien').DataTable({
                   "serverSide": true,
@@ -124,10 +188,75 @@
                   },
               });
 
-              // image blog
+              var dataTable2 = $('#tabel_rawatan').DataTable({
+                  "serverSide": true,
+                  "responsive": true,
+                  "pageLength": 25,
+                  "order": [],
+                  "ajax": {
+                      "url": "<?php echo base_url(); ?>pasien/tabelrawatanpasien",
+                      "type": "POST",
+                      "data": function(data) {
+                          data.id_pasien = $('#idpasien').val()
+                      },
+                  },
+                  columnDefs: [{
+                      orderable: false,
+                      targets: [0, 1, 2, 3, 4]
+                  }],
+                  autoWidth: !1,
+                  language: {
+                      search: "Cari",
+                      paginate: {
+                          "next": "<i class='ni ni-bold-right text-primary'></i>",
+                          "previous": "<i class='ni ni-bold-left text-primary'></i>"
+                      }
+                  },
+              });
+
+              // rawatan_baru
               $(document).on('click', '.rawatan_baru', function() {
                   var id = $(this).attr('id');
                   window.open('<?= base_url(); ?>pasien/rawatanbaru/' + id);
+              });
+
+              // riwayat rawatan
+              $(document).on('click', '.riwayat_rawatan', function() {
+                  var id = $(this).attr('id');
+                  var namapasien = $(this).attr('namapasien');
+                  $('.modal-title').text(namapasien);
+                  $('#idpasien').val(id);
+                  dataTable2.ajax.reload();
+                  $('#riwayatrawatanModal').modal('show');
+              });
+              // detail pasien
+              $(document).on('click', '.detail_pasien', function() {
+                  var id = $(this).attr('id');
+                  var namapasien = $(this).attr('namapasien');
+                  $('.modal-title').text(namapasien);
+                  $('#idpasien').val(id);
+                  $.ajax({
+                      url: '<?php echo base_url(); ?>pasien/fetchSinglePasien',
+                      method: 'POST',
+                      data: {
+                          id: id
+                      },
+                      dataType: 'json',
+                      success: function(data) {
+                          $('#detailpasienModal').modal('show');
+                          console.log(data);
+                          $('.detail_nama').text(data.nama);
+                          $('.detail_nik').text(data.nik);
+                          $('.detail_no_mr').text(data.no_mr);
+                          $('.detail_jenis_kelamin').text(data.jenis_kelamin);
+                          $('.detail_tanggal_lahir').text(data.tanggal_lahir);
+                          $('.detail_alamat').text(data.alamat);
+                          $('.detail_notelp1').text(data.notelp1);
+                          $('.detail_nama_pj').text(data.nama_pj);
+                          $('.detail_notelp3').text(data.notelp3);
+                      }
+                  });
+
               });
 
               $(document).on("click", ".ubahstatus", function() {

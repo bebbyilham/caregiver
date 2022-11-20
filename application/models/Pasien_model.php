@@ -114,6 +114,73 @@
             return $this->db->count_all_results();
         }
         //end rawatan
+        //tabel rawatan pasien
+        var $order_column_rawatanpasien = array(null, 'name', null, 'status', 'created_at', null);
+        public function make_query_rawatanpasien()
+        {
+            // $id_rawatan = $_POST['idpasien'];
+            $this->db->select('
+            rawatan.id AS id,
+            rawatan.id_pasien AS id_pasien,
+            rawatan.diagnosa_sakit AS diagnosa_sakit,
+            rawatan.barthel_index_score AS barthel_index_score,
+            rawatan.barthel_index_score_date AS barthel_index_score_date,
+            rawatan.alergi AS alergi,
+            rawatan.tgl_awal_rawatan AS tgl_awal_rawatan,
+            rawatan.tgl_akhir_rawatan AS tgl_akhir_rawatan,
+            rawatan.created_at AS created_at,
+            rawatan.updated_at AS updated_at,
+            pasien.nama AS nama,
+            pasien.nik AS nik,
+            pasien.no_mr AS no_mr,
+            pasien.no_mr AS no_mr,
+            pasien.tanggal_lahir AS tanggal_lahir,
+            pasien.jenis_kelamin AS jenis_kelamin
+            ');
+            // $this->db->where('jenis_layanan', 2);
+            $this->db->from('rawatan');
+            $this->db->join('pasien', 'pasien.id = rawatan.id_pasien', 'LEFT');
+            $this->db->where('id_pasien', $_POST['id_pasien']);
+            if (($_POST["search"]["value"])) {
+                $this->db->like('nama', $_POST["search"]["value"]);
+            }
+
+            if (isset($_POST["order"])) {
+                $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            } else {
+                $this->db->order_by('rawatan.created_at', 'ASC');
+            }
+        }
+
+
+        public function make_datatables_rawatanpasien()
+        {
+            $this->make_query_rawatanpasien();
+
+            if (
+                $_POST["length"] != -1
+            ) {
+                $this->db->limit($_POST['length'], $_POST['start']);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_filtered_data_rawatanpasien()
+        {
+            $this->make_query_rawatanpasien();
+            $query = $this->db->get();
+
+            return $query->num_rows();
+        }
+
+        public function get_all_data_rawatanpasien()
+        {
+            $this->db->select("*");
+            $this->db->from('rawatan');
+            return $this->db->count_all_results();
+        }
+        //end rawatan
         //tabel aktivitas
         var $order_column_aktivitas = array(null, 'name', null, 'status', 'created_at', null);
         public function make_query_aktivitas()
@@ -781,6 +848,15 @@
         public function simpan_hasil_lab($data)
         {
             $this->db->insert('hasil_lab', $data);
+        }
+
+        public function fetch_single_pasien($id)
+        {
+            $this->db->select('*');
+            $this->db->from('pasien');
+            $this->db->where('id', $id);
+            $query = $this->db->get();
+            return $query->result();
         }
 
 

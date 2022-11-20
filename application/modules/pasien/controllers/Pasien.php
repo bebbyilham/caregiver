@@ -251,6 +251,69 @@ class Pasien extends MX_Controller
         );
         echo json_encode($output);
     }
+    public function tabelrawatanpasien()
+    {
+        $fetch_data = $this->Pasien_model->make_datatables_rawatanpasien();
+
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($fetch_data as $row) {
+            $no++;
+            $sub_array = array();
+            $birthDate = new DateTime($row->tanggal_lahir);
+            $today = new DateTime("today");
+            if ($birthDate > $today) {
+                exit("0 tahun 0 bulan 0 hari");
+            }
+            $y = $today->diff($birthDate)->y;
+            $m = $today->diff($birthDate)->m;
+            $d = $today->diff($birthDate)->d;
+            $sub_array[] = '<div class="text-center">
+            <div class="dropdown">
+                            <a class="text-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v mr-2"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <span class="small p-3 font-weight-bold text-dark">' . $row->nama . '</span>
+                                <a class="dropdown-item aktivitas" href="' . base_url('pasien/aktivitas/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '" >Aktivitas</a>
+                                <a class="dropdown-item keadaan_pasien" href="' . base_url('pasien/keadaan/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" id="' . $row->id . '" namapasien="' . $row->nama . '" >Keadaan Pasien</a>
+                                <a class="dropdown-item tanda_vital" href="' . base_url('pasien/tandavital/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Tanda Vital</a>
+                                <a class="dropdown-item catatan_perkembangan" href="' . base_url('pasien/catatanperkembangan/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Catatan Perkembangan</a>
+                                <a class="dropdown-item medikasi" href="' . base_url('pasien/medikasi/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Medikasi</a>
+                                <a class="dropdown-item pemantauan_alat_medik" href="' . base_url('pasien/pemantauanalatmedik/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Pemantauan Alat Medik</a>
+                                <a class="dropdown-item integritas_kulit" href="' . base_url('pasien/integritaskulit/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Integritas Kulit</a>
+                                <a class="dropdown-item hasil_lab_penunjang" href="' . base_url('pasien/hasillab/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
+                            </div>
+            </div><br><br>
+            <a class="text-primary cetakresume" href="#" id="' . $row->id . '" idpasien="' . $row->id_pasien . '" namapasien="' . $row->nama . '">
+                                <i class="fas fa-print mr-2"></i>
+            </a>
+            </div>
+            ';
+            // $sub_array[] = $no;
+            if ($row->jenis_kelamin == '1') {
+                $jk = 'Laki-laki';
+            } else {
+                $jk = 'Perempuan';
+            }
+            $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->no_mr . "<br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari <br>" . $row->created_at;
+            $sub_array[] = $row->diagnosa_sakit;
+
+            $sub_array[] = "<b>" . $row->barthel_index_score . "</b><br>" . $row->barthel_index_score_date;
+            $sub_array[] = "<span>" . $row->alergi . "</span>";
+
+
+            $data[] = $sub_array;
+        }
+
+        $output = array(
+            "draw"                => intval($_POST['draw']),
+            "recordsTotal"        => $this->Pasien_model->get_all_data_rawatanpasien(),
+            "recordsFiltered"     => $this->Pasien_model->get_filtered_data_rawatanpasien(),
+            "data"                => $data
+        );
+        echo json_encode($output);
+    }
 
     public function aktivitas($id, $idpasien)
     {
@@ -1093,6 +1156,28 @@ class Pasien extends MX_Controller
         $data['content'] = '';
         $page = 'pasien/cetakresume';
         $this->load->view($page, $data);
+    }
+
+    public function fetchSinglePasien()
+    {
+        $output = array();
+        $data = $this->Pasien_model->fetch_single_pasien($_POST["id"]);
+        foreach ($data as $row) {
+            $output['id']   = $row->id;
+            $output['nama']   = $row->nama;
+            $output['nik']   = $row->nik;
+            $output['no_mr']   = $row->no_mr;
+            $output['jenis_kelamin']   = $row->jenis_kelamin;
+            $output['tanggal_lahir']   = $row->tanggal_lahir;
+            $output['alamat']   = $row->alamat;
+            $output['notelp1']   = $row->notelp1;
+            $output['notelp2']   = $row->notelp2;
+            $output['nama_pj']   = $row->nama_pj;
+            $output['notelp3']   = $row->notelp3;
+            $output['call_ambulance']   = $row->call_ambulance;
+            $output['created_at']   = $row->created_at;
+        }
+        echo json_encode($output);
     }
 
     public function ubahstatusblog()

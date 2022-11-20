@@ -52,51 +52,7 @@
               </div>
           </div>
       </div>
-      <!-- Modal Create User -->
-      <div class="modal fade" id="modal_tambah_blog" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h4 class="modal-title text-primary"></h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <form method="post" id="tambah_user">
-                      <div class="modal-body">
-                          <input type="hidden" name="pegawai_id" id="pegawai_id">
-                          <input type="hidden" id="id_user" name="id_user">
-                          <input type="hidden" name="action_modal" id="action_modal" value="edit">
-                          <input type="hidden" name="nama_akun" id="nama_akun">
-                          <div class="form-group">
-                              <label for="judul">Judul</label>
-                              <input type="text" class="form-control rounded-0" id="judul" name="judul" placeholder="Judul">
-                              <small><span class="text-danger" id="error_judul"></span></small>
-                          </div>
-                          <div class="form-group">
-                              <label for="password">Password</label>
-                              <input type="password" class="form-control rounded-0" id="password" name="password" placeholder="Password">
-                              <small><span class="text-danger" id="error_password"></span></small>
-                          </div>
-                          <div class="form-group">
-                              <label for="password2">Ulangi Password</label>
-                              <input type="password" class="form-control rounded-0" id="password2" name="password2" placeholder="Ulangi Password">
-                              <small><span class="text-danger" id="error_password2"></span></small>
-                          </div>
-                          <div class="form-group">
-                              <label for="role_id">Role</label>
-                              <select class="custom-select rounded-0" id="role_id" name="role_id"></select>
-                              <small><span class="text-danger" id="error_role_id"></span></small>
-                          </div>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                          <button type="submit" class="btn btn-primary">Submit</button>
-                      </div>
-                  </form>
-              </div>
-          </div>
-      </div>
+
       <div class="modal fade" id="resumemedisModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
               <form method="post" id="form_print">
