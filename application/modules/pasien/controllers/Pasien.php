@@ -235,8 +235,26 @@ class Pasien extends MX_Controller
             }
             $sub_array[] = "<b>" . strtoupper("$row->nama") . "</b><br>" . $row->no_mr . "<br>" . $row->nik . "<br>" . strtoupper("$jk") . "<br>" . $y . " Tahun " . $m . " Bulan " . $d . " Hari <br>" . $row->created_at;
             $sub_array[] = $row->diagnosa_sakit;
-
-            $sub_array[] = "<b>" . $row->barthel_index_score . "</b><br>" . $row->barthel_index_score_date;
+            if ($row->barthel_index_score >= 0 && $row->barthel_index_score <= 4) {
+                $sub_array[] = '
+                 <span class="badge badge-danger">' . $row->barthel_index_score . ' - KETERGANTUNGAN TOTAL</span><br><span class="badge badge-primary">' . $row->barthel_index_score_date . '</span>';
+            } else if ($row->barthel_index_score >= 5 && $row->barthel_index_score <= 8) {
+                $sub_array[] = '
+                 <span class="badge badge-warning">' . $row->barthel_index_score . ' - KETERGANTUNGAN BERAT</span><br><span class="badge badge-primary">' . $row->barthel_index_score_date . '</span>';
+            } else if ($row->barthel_index_score >= 9 && $row->barthel_index_score <= 11) {
+                $sub_array[] = '
+                 <span class="badge badge-info">' . $row->barthel_index_score . ' - KETERGANTUNGAN SEDANG</span><br><span class="badge badge-primary">' . $row->barthel_index_score_date . '</span>';
+            } else if ($row->barthel_index_score >= 12 && $row->barthel_index_score <= 19) {
+                $sub_array[] = '
+                 <span class="badge badge-info">' . $row->barthel_index_score . ' - KETERGANTUNGAN RINGAN</span><br><span class="badge badge-primary">' . $row->barthel_index_score_date . '</span>';
+            } else if ($row->barthel_index_score >= 20) {
+                $sub_array[] = '
+                 <span class="badge badge-success">' . $row->barthel_index_score . ' - MANDIRI</span><br><span class="badge badge-primary">' . $row->barthel_index_score_date . '</span>';
+            } else {
+                $sub_array[] = '
+                 <span class="badge badge-danger">' . $row->barthel_index_score . '</span>';
+            }
+            // $sub_array[] = "<b>" . $row->barthel_index_score . "</b><br>" . $row->barthel_index_score_date;
             $sub_array[] = "<span>" . $row->alergi . "</span>";
 
 
@@ -354,9 +372,26 @@ class Pasien extends MX_Controller
             'no_transaksi'          => $notransaksi,
             'status'                => 1,
         );
+        $makan = $_POST['makan'];
+        $mandi                 = $_POST['mandi'];
+        $kebersihan_diri        = $_POST['kebersihan_diri'];
+        $berpakaian               = $_POST['berpakaian'];
+        $defekasi             = $_POST['defekasi'];
+        $miksi                 = $_POST['miksi'];
+        $penggunaan_toilet     = $_POST['penggunaan_toilet'];
+        $transfer             = $_POST['transfer'];
+        $mobilitas            = $_POST['mobilitas'];
+        $naik_tangga          = $_POST['naik_tangga'];
+        $barthel_index_score = $makan + $mandi + $kebersihan_diri + $berpakaian + $defekasi + $miksi + $penggunaan_toilet + $transfer + $mobilitas + $naik_tangga;
+
+        $data_rawatan = array(
+            'barthel_index_score'   => $barthel_index_score,
+            'barthel_index_score_date' => date('Y/m/d'),
+        );
 
         $this->Pasien_model->simpan_aktivitas($data_aktivitas);
         $this->Pasien_model->simpan_transaksi($data_transaksi);
+        $this->Pasien_model->update_rawatan($data_rawatan, $_POST['id_rawatan']);
         echo json_encode([
             'aktivitas' => $data_aktivitas,
             'transaksi' => $data_transaksi
@@ -954,7 +989,7 @@ class Pasien extends MX_Controller
             'text_keadaan_pasien_e'                    => $_POST['text_keadaan_pasien_e'],
             'text_keadaan_pasien_v'                 => $_POST['text_keadaan_pasien_v'],
             'text_keadaan_pasien_m'        => $_POST['text_keadaan_pasien_m'],
-            'keadaan_pasien_gjs'                => $_POST['keadaan_pasien_gjs'],
+            'keadaan_pasien_gjs'                => $_POST['keadaan_pasien_e'] + $_POST['keadaan_pasien_v'] + $_POST['keadaan_pasien_m'],
             'kesadaran'              => $_POST['kesadaran'],
             'text_kesadaran'              => $_POST['text_kesadaran'],
             'status'                => 1,

@@ -93,14 +93,6 @@
                   </div>
                   <div class="col-lg-6 col-12">
                     <div class="form-group">
-                      <label class="form-control-label" for="keadaan_pasien_gjs">GJS</label>
-                      <input type="number" class="form-control" id="keadaan_pasien_gjs" name="keadaan_pasien_gjs" placeholder="Rentang 3 s.d 15" autocomplete="off">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6 col-12">
-                    <div class="form-group">
                       <label class="form-control-label" for="kesadaran">Kesadaran</label>
                       <select class="custom-select" id="kesadaran" name="kesadaran">
                         <option value="1">COMPOS MENTIS</option>
@@ -110,6 +102,15 @@
                         <option value="5">COMA</option>
                       </select>
                     </div>
+                    <!-- <div class="col-lg-6 col-12">
+                    <div class="form-group">
+                      <label class="form-control-label" for="keadaan_pasien_gjs">GCS</label>
+                      <input type="number" class="form-control" id="keadaan_pasien_gjs" name="keadaan_pasien_gjs" placeholder="Rentang 3 s.d 15" autocomplete="off">
+                    </div>
+                  </div> -->
+                  </div>
+                  <div class="row">
+
                   </div>
 
                 </div>
@@ -203,12 +204,12 @@
           var text_keadaan_pasien_e = $('#keadaan_pasien_e option:selected').text()
           var text_keadaan_pasien_v = $('#keadaan_pasien_v option:selected').text()
           var text_keadaan_pasien_m = $('#keadaan_pasien_m option:selected').text()
-          var keadaan_pasien_gjs = $('#keadaan_pasien_gjs').val()
+          // var keadaan_pasien_gjs = $('#keadaan_pasien_gjs').val()
           var kesadaran = $('#kesadaran').val()
           var text_kesadaran = $('#kesadaran option:selected').text()
           var status = '1';
 
-          if (id_pasien == '' || id_rawatan == '' || keadaan_pasien_e == '' || keadaan_pasien_v == '' || keadaan_pasien_m == '' || keadaan_pasien_gjs == '' || kesadaran == '') {
+          if (id_pasien == '' || id_rawatan == '' || keadaan_pasien_e == '' || keadaan_pasien_v == '' || keadaan_pasien_m == '' || kesadaran == '') {
             console.log('data belum lengkap');
             Swal.fire({
               icon: 'error',
@@ -229,7 +230,7 @@
                 text_keadaan_pasien_e: text_keadaan_pasien_e,
                 text_keadaan_pasien_v: text_keadaan_pasien_v,
                 text_keadaan_pasien_m: text_keadaan_pasien_m,
-                keadaan_pasien_gjs: keadaan_pasien_gjs,
+                // keadaan_pasien_gjs: keadaan_pasien_gjs,
                 kesadaran: kesadaran,
                 text_kesadaran: text_kesadaran,
               },

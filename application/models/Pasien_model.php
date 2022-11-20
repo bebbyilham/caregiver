@@ -705,6 +705,11 @@
         }
         //end hasil_lab
 
+        public function update_rawatan($data, $id)
+        {
+            $this->db->where('id', $id);
+            $this->db->update('rawatan', $data);
+        }
         public function update_aktivitas($data, $id)
         {
             $this->db->where('id', $id);

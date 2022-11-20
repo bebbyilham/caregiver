@@ -47,7 +47,7 @@ $menu = $this->db->query($queryMenu)->result_array();
                         <li class="nav-item active">
                             <a class="nav-link " href="#navbar-<?php echo $m['id']; ?>" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-<?php echo $m['id']; ?>">
                                 <!-- <i class="<?php echo $m['icon']; ?>"></i> -->
-                                <i class="far fa-circle text-primary"></i>
+                                <i class="fas fa-dot-circle text-primary"></i>
                                 <span class="nav-link-text"><b><?= $m['menu']; ?></b></span>
                             </a>
 
