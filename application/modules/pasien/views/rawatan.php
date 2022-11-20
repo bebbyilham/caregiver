@@ -97,9 +97,54 @@
               </div>
           </div>
       </div>
+      <div class="modal fade" id="resumemedisModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <form method="post" id="form_print">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Tanggal Resume Medis</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <div class="form-group">
+                              <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                                  <input type="text" class="form-control datetimepicker-input" name="tanggal_print" id="tanggal_print" data-target="#datetimepicker1" placeholder="Tanggal Resume Medis" autocomplete="off">
+                                  <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                  </div>
+                              </div>
+                              <small><span class="text-danger" id="error_tanggal3"></span></small>
+                          </div>
+                          <!-- <div class="form-group">
+							<input type="text" name="jabatan" id="jabatan" class="form-control" placeholder="Jabatan">
+						</div>
+						<div class="form-group">
+							<input type="text" name="nama" id="nama" class="form-control" placeholder="Nama Pegawai">
+						</div> -->
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                          <input type="hidden" name="idrawatan" id="idrawatan">
+                          <input type="hidden" name="idpasien" id="idpasien">
+                          <button type="button" class="btn btn-primary" id="btn_print">Print</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
       <script>
           $(document).ready(function() {
               $('#loading').hide();
+              $('#tanggal_print').datetimepicker({
+                  timepicker: false,
+                  datepicker: true,
+                  scrollInput: false,
+                  theme: 'success',
+                  format: 'd-m-Y',
+                  maxDate: '+2y',
+              });
               // DataTable
               var dataTable = $('#tabel_rawatan').DataTable({
                   "serverSide": true,
@@ -124,10 +169,49 @@
                   },
               });
 
-              // image blog
+              // rawatan baru
               $(document).on('click', '.rawatan_baru', function() {
                   var id = $(this).attr('id');
                   window.open('<?= base_url(); ?>pasien/rawatanbaru/' + id);
+              });
+
+              // Print resume medis
+              $(document).on('click', '.cetakresume', function() {
+                  var id = $(this).attr('id');
+                  var idpasien = $(this).attr('idpasien');
+                  var namapasien = $(this).attr('namapasien');
+                  $('#resumemedisModal').modal('show');
+                  $('.modal-title').text(namapasien);
+                  $('#idrawatan').val(id);
+                  $('#idpasien').val(idpasien);
+              });
+
+              $(document).on('click', '#btn_print', function() {
+                  var id = $('#idrawatan').val();
+                  var idpasien = $('#idpasien').val();
+                  var tgl = $('#tanggal_print').val();
+                  var err = $('#error_tanggal').val();
+
+                  if ($('#tanggal_print').val() == '') {
+                      err = 'Tanggal tidak boleh kosong';
+                      $('#error_tanggal').text(err);
+                      tgl = '';
+                  } else {
+                      err = '';
+                      $('#error_tanggal').text(err);
+                      tgl = $('#tanggal_print').val();
+                  }
+
+                  if (err != '') {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Data belum lengkap!',
+                          text: 'Mohon lengkapi data terlebih dahulu',
+                      });
+                  } else {
+                      $('#resumemedisModal').modal('hide');
+                      window.open('<?php echo base_url('pasien/cetakresume/'); ?>' + id + '/' + idpasien + '/' + tgl);
+                  }
               });
 
               $(document).on("click", ".ubahstatus", function() {

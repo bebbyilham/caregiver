@@ -67,17 +67,17 @@
         $id_rawatan = $idrawatan;
         $id_pegawai = $user['pegawai_id'];
 
-        // $queryRawatan = "SELECT 
+        // $queryPerawatan = "SELECT 
         //                     p.nama AS nama,
-        //                     p.tanggal_lahir AS tanggal_lahir
+        //                     SUM(rw.id_pasien) AS jumlah_rawatan
 
 
         //                     FROM rawatan AS rw
         //                     LEFT JOIN pasien AS p ON p.id  = rw.id_pasien
-        //                     WHERE rw.id = $id_rawatan
+        //                     WHERE pd.id = $id_pasien
         //                     ";
 
-        // $rawatan = $this->db->query($queryRawatan)->result_array();
+        // $perawatan = $this->db->query($queryPerawatan)->result_array();
 
         //pegawai
         $queryPegawai = "SELECT 
@@ -106,11 +106,12 @@
                             keadaan.kesadaran AS kesadaran,
                             keadaan.text_kesadaran AS text_kesadaran,
                             keadaan.created_at AS created_at,
-                            keadaan.updated_at AS updated_at
+                            keadaan.updated_at AS updated_at,
+                            (keadaan.keadaan_pasien_e+keadaan.keadaan_pasien_v+keadaan.keadaan_pasien_m) AS skor_gjs
                           
                             
                             FROM keadaan 
-                            WHERE keadaan.id_rawatan = $id_rawatan AND keadaan.status != 99
+                            WHERE keadaan.id_rawatan = $id_rawatan AND keadaan.status != 99 ORDER BY keadaan.id DESC LIMIT 1
                             ";
         $keadaan = $this->db->query($queryKeadaan)->result_array();
         //tandavital
@@ -193,8 +194,8 @@
                             integritas_kulit.updated_at AS updated_at
                           
                             
-                            FROM integritas_kulit
-                            WHERE integritas_kulit.id_rawatan = $id_rawatan AND integritas_kulit.status != 99
+                            FROM integritas_kulit 
+                            WHERE integritas_kulit.id_rawatan = $id_rawatan AND integritas_kulit.status != 99  ORDER BY integritas_kulit.id DESC LIMIT 1
                             ";
         $integritas_kulit = $this->db->query($queryIntegritasKulit)->result_array();
         //integritas kulit
@@ -216,7 +217,7 @@
                             ";
         $medikasi = $this->db->query($queryMedikasi)->result_array();
 
-
+        $tgl_lahir = $pasien['tanggal_lahir'];
         $birthDate = new DateTime($pasien['tanggal_lahir']);
         $today = new DateTime("today");
         if ($birthDate > $today) {
@@ -230,7 +231,9 @@
             <div class="col-12">
                 <div class="col-12">
                     <h6 class="text-center">HEBRINGS</h6>
-                    <h6 class="text-center">PERAWATAN KE </h6>
+                    <h6 class="text-center">PERAWATAN KE <?php echo $jumlahrawatan; ?>
+
+                    </h6>
                 </div>
             </div>
         </div>
@@ -238,195 +241,78 @@
 
         <tr class="tg-0pky">TELAH DILAKUKAN PERAWATAN PASIEN ATAS NAMA
             <br><b><?php echo strtoupper($pasien['nama']); ?></b>
+            <br><?php echo date("d/m/Y", strtotime($tgl_lahir)); ?>
             <br>USIA <?php echo $y . " TAHUN " . $m . " BULAN " . $d . " HARI"; ?>
         </tr>
 
         <br>
         <br>
-        <tr>
-            <td class="tg-0pky"><b>KEADAAN PASIEN</b> :</td>
-        </tr>
-        <table class="tg">
-            <tbody>
-
-                <?php foreach ($keadaan as $k) : ?>
-                    <?php
-                    // $i++;
-                    ?>
-                    <tr>
-                        <td class="tg-0lax"><span><?php echo $k['created_at']; ?></span></td>
-                        <td class="tg-0lax" colspan="3">
-                            E : <?php echo $k['text_keadaan_pasien_e']; ?>
-                            <br>
-                            V : <?php echo $k['text_keadaan_pasien_v']; ?>
-                            <br>
-                            M : <?php echo $k['text_keadaan_pasien_m']; ?>
-                        </td>
-                    </tr>
-
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <br>
-        <tr>
-            <td class="tg-0pky"><b>TANDA VITAL</b> :</td>
-        </tr>
         <table class="tg">
             <tbody>
                 <tr>
-                    <td class="tg-0lax"><span>Waktu</span></td>
-                    <td class="tg-0lax">Total Skor
+                    <td class="tg-0pky"><b>KONDISI PASIEN</b></td>
+                    <td class="tg-0pky">:</td>
+
+                    <?php foreach ($keadaan as $k) : ?>
+
+                        <td class="tg-0pky"><?php echo $k['text_kesadaran']; ?></td>
+
+                    <?php endforeach; ?>
+                </tr>
+                <tr>
+                    <td class="tg-0pky"><b>TANDA VITAL</b></td>
+                    <td class="tg-0pky">:</td>
+                    <?php foreach ($tanda_vital as $tv) : ?>
+
+                        <td class="tg-0pky">TD: <?php echo $tv['sistolik'] . '/' . $tv['diastolik'] . ' mmHg N: ' . $tv['nadi'] . ' x/menit' ?></td>
+
+                    <?php endforeach; ?>
+                </tr>
+                <tr>
+                    <td class="tg-0pky"><b>ALAT MEDIS YANG TERPASANG</b></td>
+                    <td class="tg-0pky">:</td>
+                    <td class="tg-0pky">
+                        <?php foreach ($pemantauan_almed as $pa) : ?>
+
+                            <?php echo '(' . date("d/m/Y", strtotime($pa['tanggal_pemasangan'])) . ') ' . $pa['nm_alat_medik'] ?><br>
+
+                        <?php endforeach; ?>
                     </td>
                 </tr>
-                <?php foreach ($tanda_vital as $tv) : ?>
-                    <?php
-                    // $i++;
-                    ?>
-
-                    <tr>
-                        <td class="tg-0lax"><span><?php echo $tv['created_at']; ?></span></td>
-                        <td class="tg-0lax" colspan="3">
-                            SISTOLIK : <?php echo $tv['sistolik']; ?>
-                            <br>
-                            DIASTOLIK : <?php echo $tv['diastolik']; ?>
-                            <br>
-                            SUHU : <?php echo $tv['suhu']; ?>
-                            <br>
-                            NADI : <?php echo $tv['nadi']; ?>
-                            <br>
-                            PERNAPANSAN : <?php echo $tv['pernapasan']; ?>
-                        </td>
-                    </tr>
-
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <br>
-        <tr class="tg-0pky"><b>SCORE BARTEL INDEX</b> : <?php echo $rawatan['barthel_index_score']; ?>
-        </tr>
-        <br>
-        <br>
-        <tr>
-            <td class="tg-0pky"><b>CATATAN PERKEMBANGAN</b> :</td>
-        </tr>
-        <table class="tg">
-            <tbody>
                 <tr>
-                    <td class="tg-0lax"><span>Petugas</span></td>
-                    <td class="tg-0lax">Catatan
+                    <td class="tg-0pky"><b>OBAT</b></td>
+                    <td class="tg-0pky">:</td>
+                    <td class="tg-0pky">
+                        <?php foreach ($medikasi as $mp) : ?>
+
+                            <?php echo $mp['nama_obat'] ?><br>
+
+                        <?php endforeach; ?>
                     </td>
                 </tr>
-                <?php foreach ($catatan_perkembangan as $cp) : ?>
-                    <?php
-                    // $i++;
-                    ?>
-
-                    <tr>
-                        <td class="tg-0lax"><span><?php echo $cp['gelar_depan'] . ' ' . $cp['nama_pegawai'] . ' ' . $cp['gelar_belakang']; ?></span><br><span><?php echo $cp['created_at']; ?></span></td>
-                        <td class="tg-0lax" colspan="3">
-                            <?php echo $cp['catatan']; ?>
-                            <br>
-                            S : <?php echo $cp['soap_s']; ?>
-                            <br>
-                            O : <?php echo $cp['soap_o']; ?>
-                            <br>
-                            A : <?php echo $cp['soap_a']; ?>
-                            <br>
-                            P : <?php echo $cp['soap_p']; ?>
-                        </td>
-                    </tr>
-
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <br>
-        <tr>
-            <td class="tg-0pky"><b>PEMANTAUAN ALAT MEDIK</b> :</td>
-        </tr>
-        <table class="tg">
-            <tbody>
                 <tr>
-                    <td class="tg-0lax"><span>Tanggal Pemasangan</span></td>
-                    <td class="tg-0lax">Alat Medik</td>
-                    <td class="tg-0lax">Ukuran</td>
-                    <td class="tg-0lax">Keterangan</td>
+                    <td class="tg-0pky"><b>TANGGAL KONTROL TERAKHIR</b></td>
+                    <td class="tg-0pky">:</td>
                 </tr>
-                <?php foreach ($pemantauan_almed as $pa) : ?>
-                    <?php
-                    // $i++;
-                    ?>
-
-                    <tr>
-                        <td class="tg-0lax"><span><?php echo $pa['tanggal_pemasangan']; ?></span></td>
-                        <td class="tg-0lax"><span><?php echo $pa['nm_alat_medik']; ?></span></td>
-                        <td class="tg-0lax"><span><?php echo $pa['ukuran']; ?></span></td>
-                        <td class="tg-0lax"><span><?php echo $pa['keterangan']; ?></span></td>
-
-                    </tr>
-
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <br>
-        <tr>
-            <td class="tg-0pky"><b>KONDISI KULIT</b> :</td>
-        </tr>
-        <table class="tg">
-            <tbody>
                 <tr>
-                    <td class="tg-0lax"><span>Waktu</span></td>
-                    <td class="tg-0lax">Kondisi Kulit</td>
-                    <td class="tg-0lax">Perawatan</td>
+                    <td class="tg-0pky"><b>Lain-lain</b></td>
+                    <td class="tg-0pky">:</td>
+                    <td class="tg-0pky">
+                        <?php foreach ($integritas_kulit as $ik) : ?>
+
+                            <?php echo $ik['kondisi_kulit'] ?><br>
+
+                        <?php endforeach; ?>
+                    </td>
                 </tr>
-                <?php foreach ($integritas_kulit as $ik) : ?>
-                    <?php
-                    // $i++;
-                    ?>
-
-                    <tr>
-                        <td class="tg-0lax"><span><?php echo $ik['created_at']; ?></span></td>
-                        <td class="tg-0lax"><span><?php echo $ik['kondisi_kulit']; ?></span></td>
-                        <td class="tg-0lax"><span><?php echo $ik['perawatan_kulit']; ?></span></td>
-
-                    </tr>
-
-                <?php endforeach; ?>
             </tbody>
         </table>
-        <br>
-        <tr>
-            <td class="tg-0pky"><b>OBAT YANG TELAH DIBERIKAN</b> :</td>
-        </tr>
-        <table class="tg">
-            <tbody>
-                <tr>
-                    <td class="tg-0lax"><span>Waktu Pemberian</span></td>
-                    <td class="tg-0lax">Nama Obat</td>
-                </tr>
-                <?php foreach ($medikasi as $mp) : ?>
-                    <?php
-                    // $i++;
-                    ?>
-
-                    <tr>
-                        <td class="tg-0lax"><span><?php echo $mp['tanggal_medikasi']; ?></span><br><span><?php echo $mp['jam_medikasi']; ?></span></td>
-                        <td class="tg-0lax"><span><?php echo $mp['nama_obat']; ?></span></td>
-
-                    </tr>
-
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <br>
-        <tr class="tg-0pky"><b>ALERGI</b> : <?php echo $rawatan['alergi']; ?>
-        </tr>
-        <br>
 
         <br>
         <div class="row">
             <div class="col-12">
                 <div class="float-right">
-                    <div class="text-center">Jakarta, <?php echo $tgl; ?></div>
+                    <div class="text-center">Jakarta, <?php echo date("d/m/Y", strtotime($tgl)); ?></div>
                     <br>
                     <?php foreach ($pegawai as $pw) : ?>
                         <br>

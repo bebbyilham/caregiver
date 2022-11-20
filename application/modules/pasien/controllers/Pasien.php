@@ -222,7 +222,7 @@ class Pasien extends MX_Controller
                                 <a class="dropdown-item hasil_lab_penunjang" href="' . base_url('pasien/hasillab/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '" namapasien="' . $row->nama . '">Hasil Lab Penunjang</a>
                             </div>
             </div><br><br>
-            <a class="text-primary" href="' . base_url('pasien/cetakresume/') . $row->id . '/' . $row->id_pasien . '" id="' . $row->id . '"  id="print_rawatan">
+            <a class="text-primary cetakresume" href="#" id="' . $row->id . '" idpasien="' . $row->id_pasien . '" namapasien="' . $row->nama . '">
                                 <i class="fas fa-print mr-2"></i>
             </a>
             </div>
@@ -1078,15 +1078,17 @@ class Pasien extends MX_Controller
         echo json_encode($output);
     }
 
-    public function cetakresume($id, $idpasien)
+    public function cetakresume($id, $idpasien, $tgl)
     {
         $data['title'] = 'Resume Medis';
         $data['user'] = $this->db->get_where('user', ['username' =>
         $this->session->userdata('username')])->row_array();
         $data['pasien'] = $this->db->get_where('pasien', ['id' => $idpasien])->row_array();
         $data['rawatan'] = $this->db->get_where('rawatan', ['id' => $id])->row_array();
+        $data['jumlahrawatan'] = $this->db->get_where('rawatan', ['id_pasien' => $idpasien])->num_rows();
         $data['idrawatan'] = $id;
         $data['idpasien'] = $idpasien;
+        $data['tgl'] = $tgl;
 
         $data['content'] = '';
         $page = 'pasien/cetakresume';
